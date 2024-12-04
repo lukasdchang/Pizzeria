@@ -11,47 +11,47 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Pizzeria"
-    tools:targetApi="34">
+        tools:targetApi="34">
 
-    <!-- Main Activity -->
-    <activity
-        android:name=".MainActivity"
-        android:exported="true"
-        android:label="@string/app_name"
-        android:theme="@style/Theme.Pizzeria">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
+        <!-- Main Activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Pizzeria">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-    <!-- Main Menu Activity -->
-    <activity
-        android:name=".MainMenuActivity"
-        android:exported="true"
-        android:label="@string/main_menu_title"
-        android:theme="@style/Theme.Pizzeria" />
+        <!-- Main Menu Activity -->
+        <activity
+            android:name=".MainMenuActivity"
+            android:exported="true"
+            android:label="@string/main_menu_title"
+            android:theme="@style/Theme.Pizzeria.NoActionBar" />
 
-    <!-- Order Activity -->
-    <activity
-        android:name=".OrderActivity"
-        android:exported="true"
-        android:label="@string/order_title"
-        android:theme="@style/Theme.Pizzeria" />
+        <!-- Order Activity -->
+        <activity
+            android:name=".OrderActivity"
+            android:exported="true"
+            android:label="@string/order_title"
+            android:theme="@style/Theme.Pizzeria" />
 
-    <!-- Order Summary Activity -->
-    <activity
-        android:name=".OrderSummaryActivity"
-        android:exported="true"
-        android:label="@string/order_summary_title"
-        android:theme="@style/Theme.Pizzeria" />
+        <!-- Order Summary Activity -->
+        <activity
+            android:name=".OrderSummaryActivity"
+            android:exported="true"
+            android:label="@string/order_summary_title"
+            android:theme="@style/Theme.Pizzeria.NoActionBar" />
 
-    <!-- Build Your Own Activity -->
-    <activity
-        android:name=".BuildYourOwnActivity"
-        android:exported="true"
-        android:label="@string/build_your_own_title"
-        android:theme="@style/Theme.Pizzeria" />
-</application>
+        <!-- Build Your Own Activity -->
+        <activity
+            android:name=".BuildYourOwnActivity"
+            android:exported="true"
+            android:label="@string/build_your_own_title"
+            android:theme="@style/Theme.Pizzeria" />
+    </application>
 
-    </manifest>
+</manifest>
