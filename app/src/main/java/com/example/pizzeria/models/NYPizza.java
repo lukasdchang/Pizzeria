@@ -1,27 +1,18 @@
 package com.example.pizzeria.models;
 
-import main.java.PizzaFactory;
-
 /**
  * Represents a factory for creating New York-style pizzas.
  * Implements the PizzaFactory interface to provide specific
  * methods for creating different types of pizzas with New York-style crusts.
- * By default, pizzas created by this factory use a medium size.
  *
+ * By default, pizzas created by this factory use a medium size.
  * This factory supports creating Deluxe, BBQ Chicken, Meatzza,
  * and Build Your Own pizzas with New York-style crusts.
- *
- * - Deluxe uses a BROOKLYN crust.
- * - BBQ Chicken uses a THIN crust.
- * - Meatzza and Build Your Own use a HAND_TOSSED crust.
- *
- * Each method creates an instance of the respective pizza type.
- *
- * @author Lukas Chang
  */
 public class NYPizza implements PizzaFactory {
 
-    private static final String STYLE = "NY Style";
+    private static final String STYLE = "New York Style";
+
     /**
      * Creates a New York-style Deluxe pizza with a Brooklyn crust.
      *

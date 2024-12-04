@@ -1,18 +1,15 @@
 package com.example.pizzeria.models;
 
-import main.java.PizzaFactory;
-
 /**
  * Represents a factory for creating Chicago-style pizzas.
  * Implements the PizzaFactory interface to provide specific
  * methods for creating different types of pizzas with Chicago-style crusts.
  * By default, pizzas created by this factory use a medium size.
- *
- * @author Lukas Chang
  */
 public class ChicagoPizza implements PizzaFactory {
 
     private static final String STYLE = "Chicago Style";
+
     /**
      * Creates a Chicago-style Deluxe pizza with a deep-dish crust.
      *

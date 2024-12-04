@@ -1,17 +1,56 @@
 package com.example.pizzeria.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Enum representing the different crust types available for pizzas.
  * Each crust type corresponds to specific styles or types of pizzas.
  * This can vary between Chicago-style and New York-style pizzas.
  *
- * @author Yousef Naam
+ * Implements Parcelable for compatibility with Android's inter-Activity communication.
  */
-public enum Crust {
+public enum Crust implements Parcelable {
     DEEP_DISH,        // Chicago-style crust for Deluxe pizza
     PAN,              // Chicago-style crust for BBQ Chicken and Build Your Own
     STUFFED,          // Chicago-style crust for Meatzza
     BROOKLYN,         // New York-style crust for Deluxe pizza
     THIN,             // New York-style crust for BBQ Chicken
-    HAND_TOSSED       // New York-style crust for Meatzza and Build Your Own
+    HAND_TOSSED;      // New York-style crust for Meatzza and Build Your Own
+
+    /**
+     * Parcelable implementation: Write the enum value to a Parcel.
+     *
+     * @param dest  the Parcel in which the object should be written
+     * @param flags additional flags about how the object should be written
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name());
+    }
+
+    /**
+     * Parcelable implementation: Describe the contents (typically 0).
+     *
+     * @return an integer representing the contents
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Parcelable.Creator implementation to create instances from a Parcel.
+     */
+    public static final Creator<Crust> CREATOR = new Creator<Crust>() {
+        @Override
+        public Crust createFromParcel(Parcel in) {
+            return Crust.valueOf(in.readString());
+        }
+
+        @Override
+        public Crust[] newArray(int size) {
+            return new Crust[size];
+        }
+    };
 }

@@ -5,10 +5,9 @@ package com.example.pizzeria.models;
  * to select their desired toppings. The price is determined based on the
  * size of the pizza and the number of toppings.
  * This class extends the abstract Pizza class.
- *
- * @author Lukas Chang
  */
 public class BuildYourOwn extends Pizza {
+
     // Base prices for Build Your Own pizza based on size
     private static final double BASE_PRICE_SMALL = 8.99;
     private static final double BASE_PRICE_MEDIUM = 10.99;
@@ -17,10 +16,11 @@ public class BuildYourOwn extends Pizza {
     private static final int MAX_TOPPINGS = 7; // Maximum number of allowed toppings
 
     /**
-     * Constructs a "Build Your Own" pizza with the specified crust and size.
+     * Constructs a "Build Your Own" pizza with the specified crust, size, and style.
      *
      * @param crust the type of crust for the pizza
      * @param size  the size of the pizza
+     * @param style the style of the pizza (e.g., "New York Style", "Chicago Style")
      */
     public BuildYourOwn(Crust crust, Size size, String style) {
         super(crust, size, style);
@@ -47,7 +47,6 @@ public class BuildYourOwn extends Pizza {
      * and the number of toppings added.
      *
      * @return the price of the pizza as a double
-     * @throws IllegalArgumentException if the pizza size is invalid
      */
     @Override
     public double price() {
@@ -67,5 +66,22 @@ public class BuildYourOwn extends Pizza {
         }
         // Calculate the total price based on the base price and number of toppings
         return basePrice + (getToppings().size() * TOPPING_PRICE);
+    }
+
+    /**
+     * Returns a string representation of the "Build Your Own" pizza, including
+     * the size, crust, style, toppings, and calculated price.
+     *
+     * @return a string representation of the pizza
+     */
+    @Override
+    public String toString() {
+        return String.format(
+                "%s %s (%s): Toppings: %s | Price: $%.2f",
+                getSize(),
+                getCrust(),
+                getToppings(),
+                price()
+        );
     }
 }

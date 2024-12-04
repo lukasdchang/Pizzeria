@@ -1,151 +1,168 @@
 package com.example.pizzeria;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import main.java.PizzaFactory;
-import main.java.models.*;
+import android.os.Bundle;
+import android.widget.*;
+import android.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * Controller class for the "Build Your Own" pizza view in the RU Pizzeria application.
- * Manages user interactions for creating custom pizzas, selecting toppings, setting pizza sizes,
- * and adding pizzas to the order.
- *
- * This controller interacts with the view via JavaFX elements and handles input changes, updates
- * the pizza details, and communicates with other controllers as needed.
- *
- * @author Yousef Naam & Lukas Chang
- */
-public class BuildYourOwnActivity {
+import com.example.pizzeria.R;
+import com.example.pizzeria.models.*;
 
-    // FXML injected elements
-    @FXML
-    private Label titleLabel;
-    @FXML
+import java.util.ArrayList;
+
+public class BuildYourOwnActivity extends AppCompatActivity {
+
+    private TextView titleLabel;
     private ImageView pizzaImageView;
-    @FXML
-    private ComboBox<String> pizzaTypeDropdown;
-    @FXML
-    private RadioButton smallRadio;
-    @FXML
-    private RadioButton mediumRadio;
-    @FXML
-    private RadioButton largeRadio;
-    @FXML
-    private TextField crustTextField; // Read-only text field for crust display
-    @FXML
-    private ListView<Topping> availableToppingsList;
-    @FXML
-    private ListView<Topping> selectedToppingsList;
-    @FXML
-    private Button addToppingButton;
-    @FXML
-    private Button removeToppingButton;
-    @FXML
-    private Button addToOrderButton;
-    @FXML
-    private TextField priceTextField;
+    private Spinner pizzaTypeSpinner;
+    private RadioButton smallRadio, mediumRadio, largeRadio;
+    private TextView crustTextView;
+    private RecyclerView availableToppingsRecyclerView, selectedToppingsRecyclerView;
+    private Button addToppingButton, removeToppingButton, addToOrderButton;
+    private TextView priceTextView;
 
-    private ToggleGroup sizeGroup; // Toggle group for radio buttons
-    private ObservableList<Topping> availableToppings;
-    private ObservableList<Topping> selectedToppings = FXCollections.observableArrayList();
-    private String style; // Style of pizza (e.g., "Chicago" or "NY")
+    private ArrayList<Topping> availableToppings;
+    private ArrayList<Topping> selectedToppings;
+    private ToppingsAdapter availableToppingsAdapter, selectedToppingsAdapter;
+
+    private String style = "Chicago"; // Default style
     private PizzaFactory pizzaFactory;
-    private OrderActivity orderActivity;
+    private Order currentOrder;
 
-    /**
-     * Initializes the controller, setting default values, and configuring UI elements.
-     * This method is called automatically after the FXML has been loaded.
-     */
-    public void initialize() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_build_your_own);
+
+        // Initialize UI components
+        initializeUIComponents();
+
         // Set default style and pizza factory
-        setStyle("Chicago");
+        setStyle(style);
 
-        // Populate available toppings list
-        availableToppings = FXCollections.observableArrayList(
-                Topping.SAUSAGE, Topping.BBQ_CHICKEN, Topping.BEEF, Topping.HAM,
-                Topping.PEPPERONI, Topping.GREEN_PEPPER, Topping.ONION, Topping.MUSHROOM,
-                Topping.OLIVE, Topping.SPINACH, Topping.PINEAPPLE, Topping.CHEDDAR, Topping.PROVOLONE
-        );
-        availableToppingsList.setItems(availableToppings);
-        selectedToppingsList.setItems(selectedToppings);
+        // Populate toppings
+        populateToppings();
 
-        // Configure size selection radio buttons
-        sizeGroup = new ToggleGroup();
-        smallRadio.setToggleGroup(sizeGroup);
-        mediumRadio.setToggleGroup(sizeGroup);
-        largeRadio.setToggleGroup(sizeGroup);
-        mediumRadio.setSelected(true); // Default size is medium
+        // Configure adapters
+        setupRecyclerViews();
 
-        // Add listeners to update price on size change
-        smallRadio.setOnAction(e -> updatePrice());
-        mediumRadio.setOnAction(e -> updatePrice());
-        largeRadio.setOnAction(e -> updatePrice());
-
-        // Configure pizza type dropdown
-        pizzaTypeDropdown.setItems(FXCollections.observableArrayList(
-                "Build your own", "Deluxe", "BBQ Chicken", "Meatzza"
-        ));
-        pizzaTypeDropdown.getSelectionModel().selectFirst(); // Default selection
-        pizzaTypeDropdown.setOnAction(e -> handlePizzaTypeSelection());
-
-        // Configure crust display and initial values
-        crustTextField.setEditable(false); // Read-only field
-        updateCrustText();
-        updatePizzaImage();
-        updatePrice();
+        // Set up event listeners
+        setupEventListeners();
     }
 
-    /**
-     * Handles adding a topping to the selected toppings list for "Build Your Own" pizzas.
-     */
-    @FXML
-    private void handleAddTopping() {
-        Topping selected = availableToppingsList.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            if (selectedToppings.contains(selected)) {
-                showAlert("Duplicate Topping", "You have already selected this topping. Please choose a different topping.");
-            } else if (selectedToppings.size() >= 7) {
-                showAlert("Topping Limit Reached", "You can select up to 7 toppings only.");
-            } else {
-                selectedToppings.add(selected);
-                updatePrice(); // Update price after adding a topping
+    private void initializeUIComponents() {
+        titleLabel = findViewById(R.id.titleLabel);
+        pizzaImageView = findViewById(R.id.pizzaImageView);
+        pizzaTypeSpinner = findViewById(R.id.pizzaTypeSpinner);
+        smallRadio = findViewById(R.id.smallRadio);
+        mediumRadio = findViewById(R.id.mediumRadio);
+        largeRadio = findViewById(R.id.largeRadio);
+        crustTextView = findViewById(R.id.crustTextView);
+        availableToppingsRecyclerView = findViewById(R.id.availableToppingsRecyclerView);
+        selectedToppingsRecyclerView = findViewById(R.id.selectedToppingsRecyclerView);
+        addToppingButton = findViewById(R.id.addToppingButton);
+        removeToppingButton = findViewById(R.id.removeToppingButton);
+        addToOrderButton = findViewById(R.id.addToOrderButton);
+        priceTextView = findViewById(R.id.priceTextView);
+    }
+
+    private void setStyle(String style) {
+        this.style = style;
+        titleLabel.setText(style + " Style Pizza");
+        pizzaFactory = style.equals("Chicago") ? new ChicagoPizza() : new NYPizza();
+        updateCrustText();
+        updatePizzaImage();
+    }
+
+    private void populateToppings() {
+        availableToppings = new ArrayList<>();
+        selectedToppings = new ArrayList<>();
+        availableToppings.add(Topping.SAUSAGE);
+        availableToppings.add(Topping.BBQ_CHICKEN);
+        availableToppings.add(Topping.BEEF);
+        availableToppings.add(Topping.HAM);
+        availableToppings.add(Topping.PEPPERONI);
+        availableToppings.add(Topping.GREEN_PEPPER);
+        availableToppings.add(Topping.ONION);
+        availableToppings.add(Topping.MUSHROOM);
+        availableToppings.add(Topping.OLIVE);
+        availableToppings.add(Topping.SPINACH);
+        availableToppings.add(Topping.PINEAPPLE);
+        availableToppings.add(Topping.CHEDDAR);
+        availableToppings.add(Topping.PROVOLONE);
+    }
+
+    private void setupRecyclerViews() {
+        availableToppingsAdapter = new ToppingsAdapter(this, availableToppings, false);
+        selectedToppingsAdapter = new ToppingsAdapter(this, selectedToppings, true);
+
+        availableToppingsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        availableToppingsRecyclerView.setAdapter(availableToppingsAdapter);
+
+        selectedToppingsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        selectedToppingsRecyclerView.setAdapter(selectedToppingsAdapter);
+    }
+
+    private void setupEventListeners() {
+        addToppingButton.setOnClickListener(v -> handleAddTopping());
+        removeToppingButton.setOnClickListener(v -> handleRemoveTopping());
+        addToOrderButton.setOnClickListener(v -> handleAddToOrder());
+
+        pizzaTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                handlePizzaTypeSelection();
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        smallRadio.setOnClickListener(v -> updatePrice());
+        mediumRadio.setOnClickListener(v -> updatePrice());
+        largeRadio.setOnClickListener(v -> updatePrice());
+    }
+
+    private void handleAddTopping() {
+        Topping selected = availableToppingsAdapter.getSelectedTopping();
+        if (selected == null) {
+            showToast("Please select a topping to add.");
+        } else if (selectedToppings.contains(selected)) {
+            showAlert("Duplicate Topping", "You have already selected this topping.");
+        } else if (selectedToppings.size() >= 7) {
+            showAlert("Topping Limit Reached", "You can select up to 7 toppings only.");
+        } else {
+            selectedToppings.add(selected);
+            selectedToppingsAdapter.notifyDataSetChanged();
+            updatePrice();
         }
     }
 
-    /**
-     * Handles removing a topping from the selected toppings list.
-     */
-    @FXML
     private void handleRemoveTopping() {
-        Topping selected = selectedToppingsList.getSelectionModel().getSelectedItem();
+        Topping selected = selectedToppingsAdapter.getSelectedTopping();
         if (selected != null) {
             selectedToppings.remove(selected);
-            updatePrice(); // Update price after removing a topping
+            selectedToppingsAdapter.notifyDataSetChanged();
+            updatePrice();
         }
     }
 
-    /**
-     * Handles changes in the selected pizza type from the dropdown menu.
-     * Updates crust, image, and toppings as needed.
-     */
-    @FXML
     private void handlePizzaTypeSelection() {
-        String selectedType = pizzaTypeDropdown.getValue();
+        String selectedType = pizzaTypeSpinner.getSelectedItem().toString();
         updateCrustText();
         updatePizzaImage();
         updatePrice();
 
-        if ("Build your own".equals(selectedType)) {
-            availableToppingsList.setDisable(false); // Allow custom toppings
+        if ("Build Your Own".equals(selectedType)) {
+            availableToppingsAdapter.enableSelection();
             selectedToppings.clear();
+            selectedToppingsAdapter.notifyDataSetChanged();
         } else {
-            availableToppingsList.setDisable(true); // Disable topping selection for preset pizzas
+            availableToppingsAdapter.disableSelection();
             selectedToppings.clear();
+            selectedToppingsAdapter.notifyDataSetChanged();
 
             Pizza presetPizza = switch (selectedType) {
                 case "BBQ Chicken" -> pizzaFactory.createBBQChicken();
@@ -155,153 +172,36 @@ public class BuildYourOwnActivity {
             };
             if (presetPizza != null) {
                 selectedToppings.addAll(presetPizza.getToppings());
+                selectedToppingsAdapter.notifyDataSetChanged();
             }
         }
     }
 
-    /**
-     * Handles adding the currently configured pizza to the order.
-     */
-    @FXML
     private void handleAddToOrder() {
-        Size selectedSize = smallRadio.isSelected() ? Size.SMALL :
-                mediumRadio.isSelected() ? Size.MEDIUM :
-                        Size.LARGE;
-
-        Pizza pizza;
-        String selectedType = pizzaTypeDropdown.getValue();
-        if ("Build your own".equals(selectedType)) {
-            String crustText = crustTextField.getText().toUpperCase().replace(" ", "_").replace("-", "_");
-
-            try {
-                // Pass style as the third argument
-                pizza = new BuildYourOwn(Crust.valueOf(crustText), selectedSize, style);
-                ((BuildYourOwn) pizza).getToppings().addAll(selectedToppings);
-            } catch (IllegalArgumentException e) {
-                showAlert(Alert.AlertType.ERROR, "Invalid Crust", "The selected crust type is not valid.");
-                return;
-            }
-        } else {
-            pizza = switch (selectedType) {
-                case "BBQ Chicken" -> pizzaFactory.createBBQChicken();
-                case "Deluxe" -> pizzaFactory.createDeluxe();
-                case "Meatzza" -> pizzaFactory.createMeatzza();
-                default -> null;
-            };
-            if (pizza != null) {
-                pizza.setSize(selectedSize);
-            }
-        }
-
-        if (pizza != null && orderActivity != null) {
-            orderActivity.addPizzaToOrder(pizza);
-            showAlert(Alert.AlertType.INFORMATION, "Pizza Added", "The pizza has been added to your order.");
-        } else {
-            showAlert(Alert.AlertType.ERROR, "Error", "Failed to add pizza to the order.");
-        }
+        // Add pizza to current order
     }
 
-    /**
-     * Updates the crust display text based on the selected pizza style and type.
-     */
     private void updateCrustText() {
-        if (style == null || pizzaTypeDropdown.getValue() == null) {
-            crustTextField.setText("");
-            return;
-        }
-
-        String selectedType = pizzaTypeDropdown.getValue();
-        if ("Chicago".equals(style)) {
-            switch (selectedType) {
-                case "Deluxe" -> crustTextField.setText("Deep Dish");
-                case "BBQ Chicken" -> crustTextField.setText("Pan");
-                case "Meatzza" -> crustTextField.setText("Stuffed");
-                case "Build your own" -> crustTextField.setText("Pan");
-            }
-        } else if ("NY".equals(style)) {
-            switch (selectedType) {
-                case "Deluxe" -> crustTextField.setText("Brooklyn");
-                case "BBQ Chicken" -> crustTextField.setText("Thin");
-                case "Meatzza" -> crustTextField.setText("Hand-tossed");
-                case "Build your own" -> crustTextField.setText("Hand-tossed");
-            }
-        }
+        // Update crust text based on pizza type and style
     }
 
-    /**
-     * Updates the pizza image based on the selected style and type.
-     */
     private void updatePizzaImage() {
-        if (style == null || pizzaTypeDropdown.getValue() == null) {
-            return;
-        }
-
-        String selectedType = pizzaTypeDropdown.getValue().toLowerCase().replace(" ", "");
-        String imagePath = String.format("/images/%s_%s.png", selectedType, style.toLowerCase());
-        try {
-            Image image = new Image(getClass().getResourceAsStream(imagePath));
-            pizzaImageView.setImage(image);
-        } catch (Exception e) {
-            // Image loading failed (silent handling)
-        }
+        // Update pizza image based on type and style
     }
 
-    /**
-     * Shows an alert message to the user.
-     *
-     * @param alertType the type of alert to show
-     * @param title     the title of the alert
-     * @param message   the message content of the alert
-     */
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    /**
-     * Convenience method to show an information alert.
-     *
-     * @param title   the title of the alert
-     * @param message the message content of the alert
-     */
-    private void showAlert(String title, String message) {
-        showAlert(Alert.AlertType.INFORMATION, title, message);
-    }
-
-    /**
-     * Updates the displayed price based on the selected pizza type, size, and toppings.
-     */
     private void updatePrice() {
-        String selectedType = pizzaTypeDropdown.getValue();
-        Size selectedSize = smallRadio.isSelected() ? Size.SMALL :
-                mediumRadio.isSelected() ? Size.MEDIUM :
-                        Size.LARGE;
-        double price = PriceCalculator.calculatePrice(selectedType, selectedSize, selectedToppings);
-        priceTextField.setText(String.format("$%.2f", price));
+        // Calculate and update price
     }
 
-    /**
-     * Sets the associated OrderActivity for managing pizza orders.
-     *
-     * @param orderActivity the OrderActivity instance
-     */
-    public void setOrderController(OrderActivity orderActivity) {
-        this.orderActivity = orderActivity;
+    private void showAlert(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", null)
+                .show();
     }
 
-    /**
-     * Sets the style of the pizza ("Chicago" or "NY") and updates related UI elements.
-     *
-     * @param style the style of the pizza
-     */
-    public void setStyle(String style) {
-        this.style = style != null ? style : "Chicago"; // Default to "Chicago" if style is null
-        titleLabel.setText(style + " Style Pizza");
-        pizzaFactory = style.equals("Chicago") ? new ChicagoPizza() : new NYPizza();
-        updateCrustText();
-        updatePizzaImage();
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

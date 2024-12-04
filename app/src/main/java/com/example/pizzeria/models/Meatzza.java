@@ -3,12 +3,11 @@ package com.example.pizzeria.models;
 import java.util.Arrays;
 
 /**
- * Represents a Meatzza Pizza, which is a specific type of pizza with
- * predefined meat toppings and pricing based on size.
- * This class extends the abstract Pizza class.
- * The Meatzza pizza includes toppings such as sausage, pepperoni, beef, and ham.
+ * Represents a Meatzza Pizza, a specific type of pizza with predefined meat
+ * toppings and pricing based on size.
  *
- * @author Yousef Naam
+ * The Meatzza pizza includes toppings such as sausage, pepperoni, beef, and ham.
+ * This class extends the abstract Pizza class.
  */
 public class Meatzza extends Pizza {
 
@@ -18,43 +17,38 @@ public class Meatzza extends Pizza {
     private static final double LARGE_PRICE = 21.99;
 
     /**
-     * Constructs a Meatzza pizza with the specified crust and size. The Meatzza
-     * pizza is initialized with default meat toppings.
+     * Constructs a Meatzza pizza with the specified crust, size, and style.
+     * The Meatzza pizza is initialized with its default meat toppings.
      *
-     * @param crust
-     *            the type of crust for the Meatzza pizza
-     * @param size
-     *            the size of the Meatzza pizza
+     * @param crust the type of crust for the Meatzza pizza
+     * @param size  the size of the Meatzza pizza
+     * @param style the style of the pizza (e.g., "New York Style", "Chicago Style")
      */
     public Meatzza(Crust crust, Size size, String style) {
-        super(crust, size, style); // Pass style to the superclass constructor
-        // Adds default toppings for Meatzza pizza
-        this.getToppings().addAll(Arrays.asList(Topping.SAUSAGE, Topping.PEPPERONI, Topping.BEEF, Topping.HAM));
+        super(crust, size, style); // Pass crust, size, and style to the superclass constructor
+        // Add default toppings for Meatzza pizza
+        this.getToppings().addAll(Arrays.asList(
+                Topping.SAUSAGE, Topping.PEPPERONI, Topping.BEEF, Topping.HAM
+        ));
     }
 
     /**
      * Calculates the price of the Meatzza pizza based on its size.
      *
      * @return the price of the pizza as a double
-     * @throws IllegalArgumentException
-     *             if the pizza size is invalid
+     * @throws IllegalArgumentException if the pizza size is invalid
      */
     @Override
     public double price() {
-        double basePrice;
         switch (getSize()) {
             case SMALL:
-                basePrice = SMALL_PRICE;
-                break;
+                return SMALL_PRICE;
             case MEDIUM:
-                basePrice = MEDIUM_PRICE;
-                break;
+                return MEDIUM_PRICE;
             case LARGE:
-                basePrice = LARGE_PRICE;
-                break;
+                return LARGE_PRICE;
             default:
                 throw new IllegalArgumentException("Invalid size");
         }
-        return basePrice;
     }
 }
