@@ -1,140 +1,155 @@
 package com.example.pizzeria;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.stage.FileChooser;
-import main.java.Order;
-import main.java.models.Pizza;
+import android.content.Context;
+import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.File;
+import com.example.pizzeria.R;
+import com.example.pizzeria.adapters.PizzaAdapter;
+import com.example.pizzeria.models.Order;
+import com.example.pizzeria.models.Pizza;
+
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Controller class for managing and displaying order summaries.
- * Handles displaying order details, cancelling orders, and exporting
- * orders to a text file. Manages a list of orders and provides an
- * interface for user interactions related to order management.
- *
- * @author Yousef Naam & Lukas Chang
- */
-public class OrderSummaryActivity {
+public class OrderSummaryActivity extends AppCompatActivity {
 
-    // FXML injected UI elements
-    @FXML
-    private ComboBox<Integer> orderNumberDropdown; // Dropdown for selecting orders
-    @FXML
-    private ListView<Pizza> orderDetailsListView;  // List view for displaying order details
-    @FXML
-    private TextField orderTotalLabel;             // Text field to display the order total
-    @FXML
-    private Button cancelOrderButton;
-    @FXML
-    private Button exportOrdersButton;
+    private Spinner orderNumberDropdown;
+    private RecyclerView orderDetailsRecyclerView;
+    private TextView orderTotalLabel;
+    private Button cancelOrderButton, exportOrdersButton;
 
-    private ObservableList<Order> orders;          // List of all orders
-    private ObservableList<Integer> orderNumbers;  // List of order numbers for the dropdown
+    private List<Order> orders;
+    private List<Integer> orderNumbers;
+    private PizzaAdapter pizzaAdapter;
 
-    /**
-     * Initializes the controller and sets up the order dropdown, order list,
-     * and necessary listeners for user interactions.
-     */
-    public void initialize() {
-        orders = FXCollections.observableArrayList(); // List to store orders
-        orderNumbers = FXCollections.observableArrayList(); // List to store order numbers
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_order_summary);
 
-        // Bind order numbers to the ComboBox
-        orderNumberDropdown.setItems(orderNumbers);
+        // Initialize UI components
+        initializeUIComponents();
 
-        // Listener for order number selection
-        orderNumberDropdown.setOnAction(e -> handleOrderSelection());
+        // Initialize data
+        initializeData();
+
+        // Set up dropdown
+        setupOrderDropdown();
+
+        // Set button listeners
+        setupButtonListeners();
     }
 
-    /**
-     * Handles the selection of an order from the dropdown menu.
-     * Displays the order details and updates the order total.
-     */
-    @FXML
-    private void handleOrderSelection() {
-        Integer selectedOrderNumber = orderNumberDropdown.getValue();
-        if (selectedOrderNumber != null) {
-            Order selectedOrder = findOrderByNumber(selectedOrderNumber);
-            if (selectedOrder != null) {
-                orderDetailsListView.setItems(FXCollections.observableArrayList(selectedOrder.getPizzas()));
-                double totalWithTax = selectedOrder.calculateTotalWithTax();
-                orderTotalLabel.setText(String.format("$%.2f", totalWithTax));
-            }
+    private void initializeUIComponents() {
+        orderNumberDropdown = findViewById(R.id.orderNumberDropdown);
+        orderDetailsRecyclerView = findViewById(R.id.orderDetailsRecyclerView);
+        orderTotalLabel = findViewById(R.id.orderTotalLabel);
+        cancelOrderButton = findViewById(R.id.cancelOrderButton);
+        exportOrdersButton = findViewById(R.id.exportOrdersButton);
+    }
+
+    private void initializeData() {
+        // Retrieve orders from a global data source or in-memory simulation
+        orders = GlobalData.getOrders(); // Replace with actual data source when implemented
+
+        // Populate order numbers
+        orderNumbers = new ArrayList<>();
+        for (Order order : orders) {
+            orderNumbers.add(order.getOrderNumber());
+        }
+
+        if (orders.isEmpty()) {
+            Toast.makeText(this, "No orders available.", Toast.LENGTH_SHORT).show();
         }
     }
 
-    /**
-     * Handles the cancellation of an order. Removes the selected order
-     * from the list of orders and updates the UI.
-     */
-    @FXML
+    private void setupOrderDropdown() {
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, orderNumbers);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        orderNumberDropdown.setAdapter(adapter);
+
+        // Listener for dropdown selection
+        orderNumberDropdown.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, android.view.View view, int position, long id) {
+                handleOrderSelection(orderNumbers.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
+    }
+
+    private void setupButtonListeners() {
+        cancelOrderButton.setOnClickListener(v -> handleCancelOrder());
+        exportOrdersButton.setOnClickListener(v -> handleExportOrders());
+    }
+
+    private void handleOrderSelection(int orderNumber) {
+        Order selectedOrder = findOrderByNumber(orderNumber);
+        if (selectedOrder != null) {
+            pizzaAdapter = new PizzaAdapter(this, selectedOrder.getPizzas());
+            orderDetailsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            orderDetailsRecyclerView.setAdapter(pizzaAdapter);
+
+            double totalWithTax = selectedOrder.calculateTotalWithTax();
+            orderTotalLabel.setText(String.format("$%.2f", totalWithTax));
+        }
+    }
+
     private void handleCancelOrder() {
-        Integer selectedOrderNumber = orderNumberDropdown.getValue();
-        if (selectedOrderNumber != null) {
-            Order orderToRemove = findOrderByNumber(selectedOrderNumber);
-            if (orderToRemove != null) {
-                orders.remove(orderToRemove);
-                orderNumbers.remove(selectedOrderNumber);
+        int selectedOrderNumber = (int) orderNumberDropdown.getSelectedItem();
+        Order orderToRemove = findOrderByNumber(selectedOrderNumber);
+        if (orderToRemove != null) {
+            orders.remove(orderToRemove);
+            orderNumbers.remove(Integer.valueOf(selectedOrderNumber));
 
-                // Clear the details view and reset total
-                orderDetailsListView.getItems().clear();
-                orderTotalLabel.setText("$0.00");
+            Toast.makeText(this, "Order " + selectedOrderNumber + " canceled.", Toast.LENGTH_SHORT).show();
 
-                // Clear selection in the ComboBox
-                orderNumberDropdown.getSelectionModel().clearSelection();
-            }
+            // Refresh UI
+            setupOrderDropdown();
+            orderDetailsRecyclerView.setAdapter(null);
+            orderTotalLabel.setText("$0.00");
         } else {
-            showAlert("No Order Selected", "Please select an order to cancel.");
+            showAlert("Error", "No order selected.");
         }
     }
 
-    /**
-     * Handles exporting all orders to a text file.
-     * Prompts the user to select a file location and writes order details to the file.
-     */
-    @FXML
     private void handleExportOrders() {
         if (orders.isEmpty()) {
-            showAlert("No Orders Available", "There are no orders to export.");
+            showAlert("No Orders", "There are no orders to export.");
             return;
         }
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Export Orders");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
-        File file = fileChooser.showSaveDialog(null);
-
-        if (file != null) {
-            try (FileWriter writer = new FileWriter(file)) {
-                for (Order order : orders) {
-                    writer.write("Order Number: " + order.getOrderNumber() + "\n");
-                    writer.write("Pizzas:\n");
-                    for (Pizza pizza : order.getPizzas()) {
-                        writer.write(pizza.toString() + "\n");
-                    }
-                    writer.write(String.format("Order Total (Tax Included): $%.2f\n", order.calculateTotalWithTax()));
-                    writer.write("\n");
+        try (FileWriter writer = new FileWriter(getFilesDir() + "/orders.txt")) {
+            for (Order order : orders) {
+                writer.write("Order Number: " + order.getOrderNumber() + "\n");
+                for (Pizza pizza : order.getPizzas()) {
+                    writer.write(pizza.toString() + "\n");
                 }
-                showAlert("Export Successful", "Orders have been successfully exported.");
-            } catch (IOException e) {
-                showAlert("Export Failed", "An error occurred while exporting the orders.");
-                e.printStackTrace();
+                writer.write(String.format("Total with Tax: $%.2f\n", order.calculateTotalWithTax()));
+                writer.write("\n");
             }
+            Toast.makeText(this, "Orders exported to " + getFilesDir() + "/orders.txt", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to export orders.");
+            e.printStackTrace();
         }
     }
 
-    /**
-     * Finds an order by its unique order number.
-     *
-     * @param orderNumber the order number to search for
-     * @return the matching Order object, or null if not found
-     */
     private Order findOrderByNumber(int orderNumber) {
         for (Order order : orders) {
             if (order.getOrderNumber() == orderNumber) {
@@ -144,38 +159,11 @@ public class OrderSummaryActivity {
         return null;
     }
 
-    /**
-     * Displays an alert dialog with the specified title and message.
-     *
-     * @param title   the title of the alert
-     * @param message the message content of the alert
-     */
     private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    /**
-     * Adds a new order to the summary. This method can be called by
-     * other controllers to add an order.
-     *
-     * @param order the order to add
-     */
-    public void addOrder(Order order) {
-        if (order != null) {
-            orders.add(order);
-            orderNumbers.add(order.getOrderNumber()); // Update ComboBox with new order number
-        }
-    }
-
-    /**
-     * Refreshes the order summary view, ensuring that the ComboBox
-     * items are up-to-date.
-     */
-    public void refreshOrderSummary() {
-        orderNumberDropdown.setItems(orderNumbers); // Already bound, no need to recreate list
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", null)
+                .show();
     }
 }

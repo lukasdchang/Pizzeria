@@ -6,6 +6,7 @@
     android:padding="16dp"
     android:background="#ff4d4d">
 
+    <!-- Title -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,6 +18,7 @@
         android:textStyle="bold"
         android:layout_marginBottom="20dp" />
 
+    <!-- Menu Buttons -->
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,6 +27,7 @@
         android:alignmentMode="alignMargins"
         android:useDefaultMargins="true">
 
+        <!-- Chicago Style Button -->
         <Button
             android:id="@+id/chicagoStyleButton"
             android:layout_width="0dp"
@@ -35,9 +38,10 @@
             android:text="Chicago Style"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:drawableTop="@drawable/chicago_style_icon"
+            android:drawableTop="@drawable/chicago_style"
             android:gravity="center" />
 
+        <!-- NY Style Button -->
         <Button
             android:id="@+id/nyStyleButton"
             android:layout_width="0dp"
@@ -48,9 +52,10 @@
             android:text="NY Style"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:drawableTop="@drawable/ny_style_icon"
+            android:drawableTop="@drawable/ny_style"
             android:gravity="center" />
 
+        <!-- Orders Placed Button -->
         <Button
             android:id="@+id/ordersPlacedButton"
             android:layout_width="0dp"
@@ -61,9 +66,10 @@
             android:text="Orders Placed"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:drawableTop="@drawable/orders_summary_icon"
+            android:drawableTop="@drawable/orders_summary"
             android:gravity="center" />
 
+        <!-- Current Order Button -->
         <Button
             android:id="@+id/currentOrderButton"
             android:layout_width="0dp"
@@ -74,7 +80,7 @@
             android:text="Current Order"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:drawableTop="@drawable/current_order_icon"
+            android:drawableTop="@drawable/current_order"
             android:gravity="center" />
     </GridLayout>
 </LinearLayout>

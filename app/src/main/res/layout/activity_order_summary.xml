@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Order Number Dropdown -->
+    <Spinner
+        android:id="@+id/orderNumberDropdown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp" />
+
+    <!-- RecyclerView to Display Pizza Details -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/orderDetailsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Order Total -->
+    <TextView
+        android:id="@+id/orderTotalLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Order Total: $0.00"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/cancelOrderButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel Order"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/exportOrdersButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Export Orders" />
+    </LinearLayout>
+</LinearLayout>
