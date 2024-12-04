@@ -1,0 +1,89 @@
+package com.example.pizzeria.adapters;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import com.example.pizzeria.R;
+import com.example.pizzeria.models.Pizza;
+
+import java.util.List;
+
+public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHolder> {
+
+    private final Context context;
+    private final List<Pizza> pizzas;
+    private int selectedPosition = RecyclerView.NO_POSITION;
+
+    public PizzaAdapter(Context context, List<Pizza> pizzas) {
+        this.context = context;
+        this.pizzas = pizzas;
+    }
+
+    /**
+     * Gets the currently selected pizza.
+     *
+     * @return the selected Pizza object, or null if none is selected
+     */
+    public Pizza getSelectedPizza() {
+        if (selectedPosition != RecyclerView.NO_POSITION) {
+            return pizzas.get(selectedPosition);
+        }
+        return null;
+    }
+
+    /**
+     * Updates the list of pizzas and refreshes the RecyclerView.
+     *
+     * @param newPizzas the updated list of pizzas
+     */
+    public void updatePizzas(List<Pizza> newPizzas) {
+        pizzas.clear();
+        pizzas.addAll(newPizzas);
+        notifyDataSetChanged();
+    }
+
+    @NonNull
+    @Override
+    public PizzaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_pizza, parent, false);
+        return new PizzaViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull PizzaViewHolder holder, int position) {
+        Pizza pizza = pizzas.get(position);
+        holder.pizzaDetails.setText(pizza.toString());
+
+        // Highlight the selected item
+        holder.itemView.setSelected(position == selectedPosition);
+
+        // Handle item selection
+        holder.itemView.setOnClickListener(v -> {
+            int previousPosition = selectedPosition;
+            selectedPosition = holder.getAdapterPosition();
+            notifyItemChanged(previousPosition);
+            notifyItemChanged(selectedPosition);
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return pizzas.size();
+    }
+
+    /**
+     * ViewHolder class for managing individual pizza items in the RecyclerView.
+     */
+    static class PizzaViewHolder extends RecyclerView.ViewHolder {
+        TextView pizzaDetails;
+
+        public PizzaViewHolder(@NonNull View itemView) {
+            super(itemView);
+            pizzaDetails = itemView.findViewById(R.id.pizzaDetails);
+        }
+    }
+}

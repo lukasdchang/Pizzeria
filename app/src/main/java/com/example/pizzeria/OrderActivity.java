@@ -1,104 +1,104 @@
 package com.example.pizzeria;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import main.java.models.Pizza;
-import main.java.Order;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.*;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * Controller class for managing orders in the RU Pizzeria application.
- * Handles adding, removing, and clearing pizzas from an order,
- * as well as calculating and displaying order totals, sales tax, and subtotals.
- *
- * This controller interacts with the OrderSummaryActivity to facilitate order
- * placement and maintains the state of the current order.
- *
- * @author Yousef Naam & Lukas Chang
- */
-public class OrderActivity {
+import com.example.pizzeria.R;
+import com.example.pizzeria.adapters.PizzaAdapter;
+import com.example.pizzeria.models.Order;
+import com.example.pizzeria.models.Pizza;
 
-    // FXML injected UI elements
-    @FXML
-    private Label orderNumberLabel;
-    @FXML
-    private ListView<Pizza> orderListView;
-    @FXML
-    private TextField subtotalLabel;
-    @FXML
-    private TextField salesTaxLabel;
-    @FXML
-    private TextField orderTotalLabel;
-    @FXML
-    private Button removePizzaButton;
-    @FXML
-    private Button clearOrderButton;
-    @FXML
-    private Button placeOrderButton;
+import java.util.ArrayList;
 
-    private Order currentOrder; // Current order instance
-    private static int orderCounter = 1; // Counter to generate unique order numbers
-    private ObservableList<Pizza> orderItems; // Observable list for ListView display
-    private OrderSummaryActivity orderSummaryActivity; // Reference to OrderSummaryActivity
-    private static boolean isOrderInitialized = false; // Tracks if order has been initialized
+public class OrderActivity extends AppCompatActivity {
 
-    /**
-     * No-argument constructor for JavaFX.
-     * Initializes the controller without parameters.
-     */
-    public OrderActivity() {
+    private TextView orderNumberLabel;
+    private RecyclerView orderRecyclerView;
+    private TextView subtotalLabel, salesTaxLabel, orderTotalLabel;
+    private Button removePizzaButton, clearOrderButton, placeOrderButton;
+
+    private Order currentOrder;
+    private PizzaAdapter pizzaAdapter;
+
+    private static final double SALES_TAX_RATE = 0.06625; // New Jersey sales tax
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_order);
+
+        // Initialize UI components
+        initializeUIComponents();
+
+        // Initialize order
+        initializeOrder();
+
+        // Set up RecyclerView
+        setupRecyclerView();
+
+        // Set button listeners
+        setupButtonListeners();
     }
 
-    /**
-     * Creates a new order with a unique order number.
-     */
-    private void createNewOrder() {
-        currentOrder = new Order(); // Constructor sets unique order number
+    private void initializeUIComponents() {
+        orderNumberLabel = findViewById(R.id.orderNumberLabel);
+        orderRecyclerView = findViewById(R.id.orderRecyclerView);
+        subtotalLabel = findViewById(R.id.subtotalLabel);
+        salesTaxLabel = findViewById(R.id.salesTaxLabel);
+        orderTotalLabel = findViewById(R.id.orderTotalLabel);
+        removePizzaButton = findViewById(R.id.removePizzaButton);
+        clearOrderButton = findViewById(R.id.clearOrderButton);
+        placeOrderButton = findViewById(R.id.placeOrderButton);
     }
 
-    /**
-     * Handles the removal of a selected pizza from the order.
-     */
-    @FXML
+    private void initializeOrder() {
+        currentOrder = new Order();
+        updateOrderNumber();
+        updateTotals();
+    }
+
+    private void setupRecyclerView() {
+        pizzaAdapter = new PizzaAdapter(this, new ArrayList<>(currentOrder.getPizzas()));
+        orderRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        orderRecyclerView.setAdapter(pizzaAdapter);
+    }
+
+    private void setupButtonListeners() {
+        removePizzaButton.setOnClickListener(v -> handleRemovePizza());
+        clearOrderButton.setOnClickListener(v -> handleClearOrder());
+        placeOrderButton.setOnClickListener(v -> handlePlaceOrder());
+    }
+
     private void handleRemovePizza() {
-        Pizza selectedPizza = orderListView.getSelectionModel().getSelectedItem();
+        Pizza selectedPizza = pizzaAdapter.getSelectedPizza();
         if (selectedPizza != null) {
             currentOrder.removePizza(selectedPizza);
-            orderItems.remove(selectedPizza);
+            pizzaAdapter.updatePizzas(new ArrayList<>(currentOrder.getPizzas()));
             updateTotals();
         } else {
             showAlert("No pizza selected", "Please select a pizza to remove.");
         }
     }
 
-    /**
-     * Handles clearing all pizzas from the current order.
-     */
-    @FXML
     private void handleClearOrder() {
         currentOrder.clearOrder();
-        orderItems.clear();
+        pizzaAdapter.updatePizzas(new ArrayList<>(currentOrder.getPizzas()));
         updateTotals();
     }
 
-    /**
-     * Handles placing the order by transferring it to the OrderSummaryActivity.
-     */
-    @FXML
     private void handlePlaceOrder() {
-        if (!orderItems.isEmpty()) {
-            if (orderSummaryActivity != null) {
-                orderSummaryActivity.addOrder(currentOrder); // Add current order
-                orderSummaryActivity.refreshOrderSummary(); // Refresh order summary view
-            } else {
-                showAlert("Order Summary Controller Missing", "Cannot place the order. OrderSummaryActivity is not set.");
-                return;
-            }
+        if (!currentOrder.getPizzas().isEmpty()) {
+            Intent intent = new Intent(this, OrderSummaryActivity.class);
+            intent.putExtra("order", currentOrder);
+            startActivity(intent);
 
-            // Clear and create a new order
             currentOrder = new Order();
-            orderItems.clear();
+            pizzaAdapter.updatePizzas(new ArrayList<>(currentOrder.getPizzas()));
             updateOrderNumber();
             updateTotals();
         } else {
@@ -106,20 +106,13 @@ public class OrderActivity {
         }
     }
 
-    /**
-     * Updates the order number label with the current order number.
-     */
     private void updateOrderNumber() {
         orderNumberLabel.setText("Order Number: " + currentOrder.getOrderNumber());
     }
 
-    /**
-     * Updates the subtotal, sales tax, and order total labels based on the
-     * current order's contents.
-     */
     private void updateTotals() {
         double subtotal = currentOrder.calculateTotal();
-        double salesTax = subtotal * 0.06625; // New Jersey sales tax
+        double salesTax = subtotal * SALES_TAX_RATE;
         double total = subtotal + salesTax;
 
         subtotalLabel.setText(String.format("$%.2f", subtotal));
@@ -127,59 +120,11 @@ public class OrderActivity {
         orderTotalLabel.setText(String.format("$%.2f", total));
     }
 
-    /**
-     * Displays an alert dialog with the specified title and message.
-     *
-     * @param title   the title of the alert
-     * @param message the message content of the alert
-     */
     private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    /**
-     * Adds a pizza to the current order and updates the order view.
-     *
-     * @param pizza the pizza to add to the order
-     */
-    public void addPizzaToOrder(Pizza pizza) {
-        if (pizza != null) {
-            currentOrder.addPizza(pizza);
-            orderItems.add(pizza); // Updates ObservableList and ListView
-            updateTotals();
-        }
-    }
-
-    /**
-     * Sets the reference to the OrderSummaryActivity for communication.
-     *
-     * @param orderSummaryActivity the OrderSummaryActivity instance
-     */
-    public void setOrderSummaryController(OrderSummaryActivity orderSummaryActivity) {
-        this.orderSummaryActivity = orderSummaryActivity;
-    }
-
-    /**
-     * Initializes the controller, sets up the order list view, and
-     * creates a new order if one has not been initialized.
-     * This method is automatically called after the FXML is loaded.
-     */
-    public void initialize() {
-        if (!isOrderInitialized) {
-            currentOrder = new Order(); // Create a new order
-            isOrderInitialized = true;
-        }
-
-        // Initialize observable list for order items
-        orderItems = FXCollections.observableArrayList();
-        orderListView.setItems(orderItems);
-
-        // Display initial order number and totals
-        updateOrderNumber();
-        updateTotals();
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", null)
+                .show();
     }
 }
