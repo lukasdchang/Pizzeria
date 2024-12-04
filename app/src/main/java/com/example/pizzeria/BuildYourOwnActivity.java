@@ -6,9 +6,11 @@ import android.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.view.View;
 
 import com.example.pizzeria.R;
 import com.example.pizzeria.models.*;
+import com.example.pizzeria.adapters.*;
 
 import java.util.ArrayList;
 
