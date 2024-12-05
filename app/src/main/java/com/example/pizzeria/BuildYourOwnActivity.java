@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
-
+import java.util.Locale;
 import com.example.pizzeria.R;
 import com.example.pizzeria.models.*;
 import com.example.pizzeria.adapters.*;
@@ -287,7 +287,39 @@ public class BuildYourOwnActivity extends AppCompatActivity {
     }
 
     private void updatePrice() {
-        // Calculate and update price
+        // Get the selected pizza type from the Spinner
+        String selectedType = pizzaTypeSpinner.getSelectedItem().toString();
+
+        // Determine the selected size using the RadioButtons
+        Size selectedSize;
+        if (smallRadio.isChecked()) {
+            selectedSize = Size.SMALL;
+        } else if (mediumRadio.isChecked()) {
+            selectedSize = Size.MEDIUM;
+        } else {
+            selectedSize = Size.LARGE;
+        }
+
+        // Calculate the price using the PriceCalculator
+        double price;
+        if ("Build your own".equals(selectedType)) {
+            // For "Build Your Own", calculate base price + topping price
+            price = PriceCalculator.calculatePrice(
+                    "Build Your Own",
+                    selectedSize,
+                    selectedToppings // Pass the selected toppings to the method
+            );
+        } else {
+            // For preset pizzas, calculate based on type and size
+            price = PriceCalculator.calculatePrice(
+                    selectedType, // Preset pizza type (e.g., "Deluxe", "BBQ Chicken")
+                    selectedSize,
+                    null // No toppings for preset pizzas
+            );
+        }
+
+        // Update the price TextView
+        priceTextView.setText(String.format(Locale.getDefault(), "$%.2f", price));
     }
 
     private void showAlert(String title, String message) {
