@@ -109,31 +109,81 @@
         android:layout_width="match_parent"
         android:layout_height="192dp">
 
-        <ImageButton
-            android:id="@+id/ordersPlacedButton"
+        <!-- Orders Placed Button -->
+        <FrameLayout
             android:layout_width="180dp"
             android:layout_height="180dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/button_background"
-            android:scaleType="fitCenter"
-            android:src="@drawable/orders_summary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
-            android:id="@+id/currentOrderButton"
+            <!-- Image Button -->
+
+            <!-- Black Transparent Overlay -->
+            <ImageButton
+                android:id="@+id/ordersPlacedButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_background"
+                android:paddingTop="20dp"
+                android:paddingBottom="60dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/orders_summary" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#003C3C3C" />
+
+            <!-- White Text on Top -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:paddingBottom="20dp"
+                android:gravity="center"
+                android:text="@string/main_menu_order_summary"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <!-- Current Order Button -->
+        <FrameLayout
             android:layout_width="180dp"
             android:layout_height="180dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/button_background"
-            android:scaleType="fitCenter"
-            android:src="@drawable/current_order"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Image Button -->
+            <ImageButton
+                android:id="@+id/currentOrderButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_background"
+                android:paddingTop="20dp"
+                android:paddingBottom="60dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/current_order" />
+
+            <!-- Black Transparent Overlay -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#003C3C3C" />
+
+            <!-- White Text on Top -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:paddingBottom="20dp"
+                android:gravity="center"
+                android:text="@string/main_menu_current_order"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
