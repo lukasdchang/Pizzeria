@@ -20,6 +20,8 @@ public class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.Toppin
     private final List<Topping> toppings;
     private final boolean isSelectable; // Add this field to handle the third parameter
     private Topping selectedTopping;
+    private boolean isSelectionEnabled = true;
+
 
     // Updated constructor
     public ToppingsAdapter(Context context, List<Topping> toppings, boolean isSelectable) {
@@ -44,11 +46,18 @@ public class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.Toppin
         Topping topping = toppings.get(position);
         holder.toppingName.setText(topping.name());
 
-        // Handle selection logic based on isSelectable
-        if (isSelectable) {
-            holder.itemView.setOnClickListener(v -> selectedTopping = topping);
+        // Highlight selected item (optional)
+        boolean isSelected = topping.equals(selectedTopping);
+        holder.itemView.setAlpha(isSelectionEnabled ? (isSelected ? 0.7f : 1.0f) : 0.5f);
+
+        // Click listener for selection
+        if (isSelectionEnabled) {
+            holder.itemView.setOnClickListener(v -> {
+                selectedTopping = topping; // Update selected topping
+                notifyDataSetChanged(); // Refresh UI to show selection
+            });
         } else {
-            holder.itemView.setOnClickListener(null); // Disable selection if not selectable
+            holder.itemView.setOnClickListener(null); // Disable click events
         }
     }
 
@@ -66,11 +75,24 @@ public class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.Toppin
         }
     }
 
+
     public void enableSelection() {
-        // Add logic to enable selection, if necessary
+        isSelectionEnabled = true;
+        notifyDataSetChanged();
     }
 
     public void disableSelection() {
-        // Add logic to disable selection, if necessary
+        isSelectionEnabled = false;
+        notifyDataSetChanged();
+    }
+
+    public interface OnToppingClickListener {
+        void onToppingSelected(Topping topping);
+    }
+
+    private OnToppingClickListener listener;
+
+    public void setOnToppingClickListener(OnToppingClickListener listener) {
+        this.listener = listener;
     }
 }

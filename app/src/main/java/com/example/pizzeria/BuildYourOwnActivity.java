@@ -39,6 +39,15 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_build_your_own);
 
+        String title = getIntent().getStringExtra("title");
+        style = getIntent().getStringExtra("style");
+
+        // Find and set the titleLabel
+        titleLabel = findViewById(R.id.titleLabel);
+        if (title != null) {
+            titleLabel.setText(title); // Set title from Intent
+        }
+
         // Back button functionality
         ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> {
@@ -55,7 +64,9 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         setupPizzaTypeSpinner();
 
         // Set default style and pizza factory
-        setStyle(style);
+        if (style != null) {
+            setStyle(style);
+        }
 
         // Populate toppings
         populateToppings();
@@ -139,7 +150,6 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         selectedToppingsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         selectedToppingsRecyclerView.setAdapter(selectedToppingsAdapter);
     }
-
     private void setupEventListeners() {
         addToppingButton.setOnClickListener(v -> handleAddTopping());
         removeToppingButton.setOnClickListener(v -> handleRemoveTopping());
@@ -172,6 +182,7 @@ public class BuildYourOwnActivity extends AppCompatActivity {
             selectedToppings.add(selected);
             selectedToppingsAdapter.notifyDataSetChanged();
             updatePrice();
+            showToast("Selected topping: " + selected.name()); // Show toast only after adding
         }
     }
 
@@ -187,17 +198,18 @@ public class BuildYourOwnActivity extends AppCompatActivity {
     private void handlePizzaTypeSelection(int position) {
         String selectedType = pizzaTypeSpinner.getSelectedItem().toString();
 
-        // Update crust text and image
-        updateCrustText();
-        updatePizzaImage();
-        updatePrice();
-
         if ("Build your own".equals(selectedType)) {
-            availableToppingsAdapter.enableSelection();
+            availableToppingsAdapter.enableSelection(); // Allow selecting toppings
+            availableToppingsRecyclerView.setAlpha(1.0f);
+            availableToppingsRecyclerView.setEnabled(true);
+
             selectedToppings.clear();
             selectedToppingsAdapter.notifyDataSetChanged();
         } else {
-            availableToppingsAdapter.disableSelection();
+            availableToppingsAdapter.disableSelection(); // Disable selecting toppings
+            availableToppingsRecyclerView.setAlpha(0.5f); // Grey out RecyclerView
+            availableToppingsRecyclerView.setEnabled(false); // Disable interaction
+
             selectedToppings.clear();
 
             Pizza presetPizza = null;
@@ -218,6 +230,10 @@ public class BuildYourOwnActivity extends AppCompatActivity {
                 selectedToppingsAdapter.notifyDataSetChanged();
             }
         }
+
+        updateCrustText();
+        updatePizzaImage();
+        updatePrice();
     }
 
     private void handleAddToOrder() {

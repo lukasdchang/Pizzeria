@@ -36,7 +36,7 @@
             android:layout_marginStart="27dp"
             android:layout_marginTop="29dp"
             android:paddingBottom="0dp"
-            android:text="Chicago Style Pizza"
+            android:text=""
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/backButton"
