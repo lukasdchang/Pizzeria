@@ -1,5 +1,6 @@
 package com.example.pizzeria;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.*;
 import android.app.AlertDialog;
@@ -38,8 +39,20 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_build_your_own);
 
+        // Back button functionality
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MainMenuActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        });
+
         // Initialize UI components
         initializeUIComponents();
+
+        // Populate pizza type Spinner
+        setupPizzaTypeSpinner();
 
         // Set default style and pizza factory
         setStyle(style);
@@ -68,6 +81,26 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         removeToppingButton = findViewById(R.id.removeToppingButton);
         addToOrderButton = findViewById(R.id.addToOrderButton);
         priceTextView = findViewById(R.id.priceTextView);
+    }
+
+    private void setupPizzaTypeSpinner() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.pizza_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        pizzaTypeSpinner.setAdapter(adapter);
+
+        // Handle item selection
+        pizzaTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                handlePizzaTypeSelection(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // No action needed
+            }
+        });
     }
 
     private void setStyle(String style) {
@@ -115,7 +148,7 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         pizzaTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                handlePizzaTypeSelection();
+                handlePizzaTypeSelection(position);
             }
 
             @Override
@@ -151,27 +184,35 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         }
     }
 
-    private void handlePizzaTypeSelection() {
+    private void handlePizzaTypeSelection(int position) {
         String selectedType = pizzaTypeSpinner.getSelectedItem().toString();
+
+        // Update crust text and image
         updateCrustText();
         updatePizzaImage();
         updatePrice();
 
-        if ("Build Your Own".equals(selectedType)) {
+        if ("Build your own".equals(selectedType)) {
             availableToppingsAdapter.enableSelection();
             selectedToppings.clear();
             selectedToppingsAdapter.notifyDataSetChanged();
         } else {
             availableToppingsAdapter.disableSelection();
             selectedToppings.clear();
-            selectedToppingsAdapter.notifyDataSetChanged();
 
-            Pizza presetPizza = switch (selectedType) {
-                case "BBQ Chicken" -> pizzaFactory.createBBQChicken();
-                case "Deluxe" -> pizzaFactory.createDeluxe();
-                case "Meatzza" -> pizzaFactory.createMeatzza();
-                default -> null;
-            };
+            Pizza presetPizza = null;
+            switch (selectedType) {
+                case "BBQ Chicken":
+                    presetPizza = pizzaFactory.createBBQChicken();
+                    break;
+                case "Deluxe":
+                    presetPizza = pizzaFactory.createDeluxe();
+                    break;
+                case "Meatzza":
+                    presetPizza = pizzaFactory.createMeatzza();
+                    break;
+            }
+
             if (presetPizza != null) {
                 selectedToppings.addAll(presetPizza.getToppings());
                 selectedToppingsAdapter.notifyDataSetChanged();
@@ -184,11 +225,49 @@ public class BuildYourOwnActivity extends AppCompatActivity {
     }
 
     private void updateCrustText() {
-        // Update crust text based on pizza type and style
+        String selectedType = pizzaTypeSpinner.getSelectedItem().toString();
+        if ("Chicago".equals(style)) {
+            switch (selectedType) {
+                case "Deluxe":
+                    crustTextView.setText("Deep Dish");
+                    break;
+                case "BBQ Chicken":
+                    crustTextView.setText("Pan");
+                    break;
+                case "Meatzza":
+                    crustTextView.setText("Stuffed");
+                    break;
+                case "Build your own":
+                    crustTextView.setText("Pan");
+                    break;
+            }
+        } else if ("NY".equals(style)) {
+            switch (selectedType) {
+                case "Deluxe":
+                    crustTextView.setText("Brooklyn");
+                    break;
+                case "BBQ Chicken":
+                    crustTextView.setText("Thin");
+                    break;
+                case "Meatzza":
+                    crustTextView.setText("Hand-tossed");
+                    break;
+                case "Build your own":
+                    crustTextView.setText("Hand-tossed");
+                    break;
+            }
+        }
     }
 
     private void updatePizzaImage() {
-        // Update pizza image based on type and style
+        String selectedType = pizzaTypeSpinner.getSelectedItem().toString().toLowerCase().replace(" ", "");
+        String imagePath = String.format("drawable/%s_%s", selectedType, style.toLowerCase());
+        try {
+            int imageResId = getResources().getIdentifier(imagePath, null, getPackageName());
+            pizzaImageView.setImageResource(imageResId);
+        } catch (Exception e) {
+            //pizzaImageView.setImageResource(R.drawable.placeholder); // Default placeholder
+        }
     }
 
     private void updatePrice() {

@@ -1,19 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/titleLabel"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Chicago Style Pizza"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:paddingBottom="16dp" />
+        android:layout_height="90dp">
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="27dp"
+            android:layout_marginBottom="34dp"
+            android:background="@drawable/circular_button"
+            android:src="@drawable/baseline_arrow_back_24"
+            android:scaleType="center"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/titleLabel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/titleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="27dp"
+            android:layout_marginTop="29dp"
+            android:paddingBottom="0dp"
+            android:text="Chicago Style Pizza"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/backButton"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
         android:id="@+id/pizzaImageView"
@@ -26,85 +54,98 @@
         android:id="@+id/pizzaTypeSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:spinnerMode="dropdown"
+        android:entries="@array/pizza_types" />
 
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/smallRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Small" />
+            android:text="@string/build_your_own_small" />
 
         <RadioButton
             android:id="@+id/mediumRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Medium"
-            android:checked="true" />
+            android:checked="true"
+            android:text="@string/build_your_own_medium" />
 
         <RadioButton
             android:id="@+id/largeRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Large" />
+            android:text="@string/build_your_own_large" />
     </RadioGroup>
 
     <TextView
         android:id="@+id/crustTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Crust: Hand-Tossed"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:text="@string/build_your_own_crust_label" />
 
-    <RecyclerView
-        android:id="@+id/availableToppingsRecyclerView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_height="138dp"
+        android:orientation="horizontal">
 
-    <RecyclerView
-        android:id="@+id/selectedToppingsRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginBottom="16dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/availableToppingsRecyclerView"
+            android:layout_width="188dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="16dp"
+            android:background="#EBEBEB"
+            android:scrollbarStyle="outsideInset"
+            android:scrollbars="vertical" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/selectedToppingsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginBottom="16dp"
+            android:background="#EBEBEB"
+            android:scrollbars="vertical" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/addToppingButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Topping"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:text="@string/build_your_own_add_topping" />
 
     <Button
         android:id="@+id/removeToppingButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Remove Topping"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:text="@string/build_your_own_remove_topping" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Price:"
-        android:layout_marginBottom="4dp" />
+        android:layout_marginBottom="4dp"
+        android:text="@string/build_your_own_price_label" />
 
     <TextView
         android:id="@+id/priceTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="$0.00"
         android:gravity="center"
+        android:text="@string/build_your_own_price_placeholder"
         android:textSize="18sp" />
 
     <Button
         android:id="@+id/addToOrderButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add to Order"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:text="Add to Order" />
 </LinearLayout>

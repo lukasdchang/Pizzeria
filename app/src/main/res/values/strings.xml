@@ -1,7 +1,51 @@
 <resources>
+    <!-- App Name -->
     <string name="app_name">Pizzeria</string>
+
+    <!-- Main Menu Strings -->
     <string name="main_menu_title">Main Menu</string>
-    <string name="order_title">Order</string>
-    <string name="order_summary_title">Order Summary</string>
+    <string name="main_menu_chicago_pizza">Chicago Style Pizza</string>
+    <string name="main_menu_ny_pizza">New York Style Pizza</string>
+    <string name="main_menu_current_order">Current Order</string>
+    <string name="main_menu_order_summary">Order Summary</string>
+
+    <!-- Build Your Own Strings -->
     <string name="build_your_own_title">Build Your Own Pizza</string>
+    <string name="build_your_own_size_label">Choose Size:</string>
+    <string name="build_your_own_small">Small</string>
+    <string name="build_your_own_medium">Medium</string>
+    <string name="build_your_own_large">Large</string>
+    <string name="build_your_own_crust_label">Crust:</string>
+    <string name="build_your_own_add_topping">Add Topping</string>
+    <string name="build_your_own_remove_topping">Remove Topping</string>
+    <string name="build_your_own_price_label">Price:</string>
+    <string name="build_your_own_price_placeholder">$0.00</string>
+    <string name="build_your_own_add_to_order">Add to order</string>
+
+    <!-- Order Strings -->
+    <string name="order_title">Order</string>
+    <string name="order_subtotal_label">Subtotal:</string>
+    <string name="order_tax_label">Sales Tax:</string>
+    <string name="order_total_label">Total:</string>
+    <string name="order_remove_pizza">Remove Pizza</string>
+    <string name="order_clear_order">Clear Order</string>
+    <string name="order_place_order">Place Order</string>
+
+    <!-- Order Summary Strings -->
+    <string name="order_summary_title">Order Summary</string>
+    <string name="order_summary_no_orders">No orders placed.</string>
+    <string name="order_summary_order_number">Order Number:</string>
+    <string name="order_summary_total_price">Total Price:</string>
+    <string name="order_summary_view_order">View Order</string>
+
+    <!-- Other string resources -->
+    <string-array name="pizza_types">
+        <item>Build your own</item>
+        <item>BBQ Chicken</item>
+        <item>Deluxe</item>
+        <item>Meatzza</item>
+    </string-array>
+
+    <!-- Common Strings -->
+    <string name="back_button">Back</string>
 </resources>
