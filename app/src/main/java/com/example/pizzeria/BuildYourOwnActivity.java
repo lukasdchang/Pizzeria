@@ -48,14 +48,10 @@ public class BuildYourOwnActivity extends AppCompatActivity {
             titleLabel.setText(title); // Set title from Intent
         }
 
-        // Back button functionality
-        ImageButton backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MainMenuActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-        });
+        // Enable the back button in the ActionBar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         // Initialize UI components
         initializeUIComponents();
@@ -76,6 +72,19 @@ public class BuildYourOwnActivity extends AppCompatActivity {
 
         // Set up event listeners
         setupEventListeners();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // Handle the back button click (just like your current backButton functionality)
+            Intent intent = new Intent(this, MainMenuActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initializeUIComponents() {

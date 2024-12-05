@@ -2,17 +2,18 @@ package com.example.pizzeria;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.pizzeria.R;
 import com.example.pizzeria.adapters.PizzaAdapter;
 import com.example.pizzeria.models.Order;
 import com.example.pizzeria.models.Pizza;
@@ -38,6 +39,12 @@ public class OrderSummaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_summary);
 
+        // Set up action bar with back button
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Order Summary");
+        }
+
         // Initialize UI components
         initializeUIComponents();
 
@@ -49,6 +56,16 @@ public class OrderSummaryActivity extends AppCompatActivity {
 
         // Set button listeners
         setupButtonListeners();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // Handle the back button click
+            finish(); // Closes this activity and returns to the previous one
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initializeUIComponents() {

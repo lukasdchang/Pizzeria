@@ -3,7 +3,7 @@
     <string name="app_name">Pizzeria</string>
 
     <!-- Main Menu Strings -->
-    <string name="main_menu_title">Main Menu</string>
+    <string name="main_menu_title">RU Pizzeria Menu</string>
     <string name="main_menu_chicago_pizza">Chicago Style Pizza</string>
     <string name="main_menu_ny_pizza">New York Style Pizza</string>
     <string name="main_menu_current_order">Current Order</string>

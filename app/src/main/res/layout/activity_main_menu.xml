@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -11,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="RU Pizzeria Menu"
+        android:text="@string/main_menu_title"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="30sp"
@@ -50,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Chicago Style Pizza"
+                android:text="@string/main_menu_chicago_pizza"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -82,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="NY Style Pizza"
+                android:text="@string/main_menu_ny_pizza"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -98,31 +100,90 @@
         android:rowCount="2"
         android:useDefaultMargins="true">
 
-        <!-- Chicago Style Button -->
-
-        <!-- NY Style Button -->
-
         <!-- Orders Placed Button -->
-        <ImageButton
-            android:id="@+id/ordersPlacedButton"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:background="@drawable/button_background"
-            android:scaleType="fitCenter"
-            android:src="@drawable/orders_summary" />
 
         <!-- Current Order Button -->
-        <ImageButton
-            android:id="@+id/currentOrderButton"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:background="@drawable/button_background"
-            android:scaleType="fitCenter"
-            android:src="@drawable/current_order" />
     </GridLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="192dp">
+
+        <!-- Orders Placed Button -->
+        <FrameLayout
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Image Button -->
+
+            <!-- Black Transparent Overlay -->
+            <ImageButton
+                android:id="@+id/ordersPlacedButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_background"
+                android:paddingTop="20dp"
+                android:paddingBottom="60dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/orders_summary" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#003C3C3C" />
+
+            <!-- White Text on Top -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:paddingBottom="20dp"
+                android:gravity="center"
+                android:text="@string/main_menu_order_summary"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <!-- Current Order Button -->
+        <FrameLayout
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Image Button -->
+            <ImageButton
+                android:id="@+id/currentOrderButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_background"
+                android:paddingTop="20dp"
+                android:paddingBottom="60dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/current_order" />
+
+            <!-- Black Transparent Overlay -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#003C3C3C" />
+
+            <!-- White Text on Top -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:paddingBottom="20dp"
+                android:gravity="center"
+                android:text="@string/main_menu_current_order"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

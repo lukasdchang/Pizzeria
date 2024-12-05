@@ -44,7 +44,7 @@
             android:name=".OrderSummaryActivity"
             android:exported="true"
             android:label="@string/order_summary_title"
-            android:theme="@style/Theme.Pizzeria.NoActionBar" />
+            android:theme="@style/Theme.Pizzeria" />
 
         <!-- Build Your Own Activity -->
         <activity

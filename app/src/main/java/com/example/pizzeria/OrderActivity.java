@@ -7,6 +7,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import android.view.MenuItem;
 
 import com.example.pizzeria.R;
 import com.example.pizzeria.adapters.PizzaAdapter;
@@ -35,6 +37,11 @@ public class OrderActivity extends AppCompatActivity {
         // Initialize UI components
         initializeUIComponents();
 
+        // Enable the back button in the action bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         // Initialize order
         initializeOrder();
 
@@ -43,6 +50,19 @@ public class OrderActivity extends AppCompatActivity {
 
         // Set button listeners
         setupButtonListeners();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // Go back to the main menu when the back button is pressed
+            Intent intent = new Intent(this, MainMenuActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initializeUIComponents() {
