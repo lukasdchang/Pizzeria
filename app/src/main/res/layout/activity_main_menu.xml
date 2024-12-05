@@ -44,7 +44,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#883C3C3C" />
+                android:background="#881F1F1F" />
 
             <!-- White Text on Top -->
             <TextView
@@ -76,7 +76,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#883C3C3C" /> <!-- Black with 50% transparency -->
+                android:background="#881F1F1F" />
 
             <!-- White Text on Top -->
             <TextView
