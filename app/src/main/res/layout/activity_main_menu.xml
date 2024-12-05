@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#ff4d4d">
+    android:background="#FF4141">
 
     <!-- Title -->
     <TextView
@@ -19,68 +19,110 @@
         android:layout_marginBottom="20dp" />
 
     <!-- Menu Buttons -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="403dp"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <!-- Chicago Style Image Button -->
+            <ImageButton
+                android:id="@+id/chicagoStyleButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_background"
+                android:scaleType="centerCrop"
+                android:src="@drawable/chicago_style" />
+
+            <!-- Black Transparent Overlay -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#883C3C3C" />
+
+            <!-- White Text on Top -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Chicago Style Pizza"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp">
+
+            <!-- NY Style Image Button -->
+            <ImageButton
+                android:id="@+id/nyStyleButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_background"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ny_style" />
+
+            <!-- Black Transparent Overlay -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#883C3C3C" /> <!-- Black with 50% transparency -->
+
+            <!-- White Text on Top -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="NY Style Pizza"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+    </LinearLayout>
+
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:alignmentMode="alignMargins"
         android:columnCount="2"
         android:rowCount="2"
-        android:alignmentMode="alignMargins"
         android:useDefaultMargins="true">
 
         <!-- Chicago Style Button -->
-        <Button
-            android:id="@+id/chicagoStyleButton"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:background="@drawable/button_background"
-            android:text="Chicago Style"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:drawableTop="@drawable/chicago_style"
-            android:gravity="center" />
 
         <!-- NY Style Button -->
-        <Button
-            android:id="@+id/nyStyleButton"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:background="@drawable/button_background"
-            android:text="NY Style"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:drawableTop="@drawable/ny_style"
-            android:gravity="center" />
 
         <!-- Orders Placed Button -->
-        <Button
+        <ImageButton
             android:id="@+id/ordersPlacedButton"
             android:layout_width="0dp"
             android:layout_height="200dp"
-            android:layout_columnWeight="1"
             android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
             android:background="@drawable/button_background"
-            android:text="Orders Placed"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:drawableTop="@drawable/orders_summary"
-            android:gravity="center" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/orders_summary" />
 
         <!-- Current Order Button -->
-        <Button
+        <ImageButton
             android:id="@+id/currentOrderButton"
             android:layout_width="0dp"
             android:layout_height="200dp"
-            android:layout_columnWeight="1"
             android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
             android:background="@drawable/button_background"
-            android:text="Current Order"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:drawableTop="@drawable/current_order"
-            android:gravity="center" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/current_order" />
     </GridLayout>
+
 </LinearLayout>

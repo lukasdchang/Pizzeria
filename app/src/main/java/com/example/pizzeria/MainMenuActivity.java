@@ -2,27 +2,23 @@ package com.example.pizzeria;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.Toast;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.pizzeria.R;
-import com.example.pizzeria.*;
-
 public class MainMenuActivity extends AppCompatActivity {
 
-    private Button chicagoStyleButton;
-    private Button nyStyleButton;
-    private Button ordersPlacedButton;
-    private Button currentOrderButton;
+    private ImageButton chicagoStyleButton;
+    private ImageButton nyStyleButton;
+    private ImageButton ordersPlacedButton;
+    private ImageButton currentOrderButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        // Initialize UI components
+        // Initialize UI components as ImageButtons
         chicagoStyleButton = findViewById(R.id.chicagoStyleButton);
         nyStyleButton = findViewById(R.id.nyStyleButton);
         ordersPlacedButton = findViewById(R.id.ordersPlacedButton);
@@ -52,7 +48,6 @@ public class MainMenuActivity extends AppCompatActivity {
      * Handles navigation to the Order Summary Activity.
      */
     private void handleOrderSummary() {
-        // Assuming OrderSummaryActivity handles displaying all orders
         Intent intent = new Intent(MainMenuActivity.this, OrderSummaryActivity.class);
         startActivity(intent);
     }
@@ -61,7 +56,6 @@ public class MainMenuActivity extends AppCompatActivity {
      * Handles navigation to the Current Order Activity.
      */
     private void handleOrderView() {
-        // Assuming OrderActivity handles displaying the current order
         Intent intent = new Intent(MainMenuActivity.this, OrderActivity.class);
         startActivity(intent);
     }
