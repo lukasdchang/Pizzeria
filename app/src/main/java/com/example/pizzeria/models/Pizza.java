@@ -104,6 +104,10 @@ public abstract class Pizza implements Parcelable {
         return size;
     }
 
+    public String getStyle() {
+        return this.style;
+    }
+
     /**
      * Abstract method to calculate the price of the pizza.
      * Must be implemented by subclasses.

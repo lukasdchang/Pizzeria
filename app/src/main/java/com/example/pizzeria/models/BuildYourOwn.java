@@ -1,5 +1,7 @@
 package com.example.pizzeria.models;
 
+import java.util.Locale;
+
 /**
  * Represents a customizable "Build Your Own" pizza that allows customers
  * to select their desired toppings. The price is determined based on the
@@ -76,12 +78,18 @@ public class BuildYourOwn extends Pizza {
      */
     @Override
     public String toString() {
-        return String.format(
-                "%s %s (%s): Toppings: %s | Price: $%.2f",
-                getSize(),
-                getCrust(),
-                getToppings(),
-                price()
-        );
+        try {
+            return String.format(
+                    Locale.US, // Specify the desired locale
+                    "%s %s (%s): Toppings: %s | Price: $%.2f",
+                    getSize(),
+                    getCrust(),
+                    getStyle(),
+                    getToppings().isEmpty() ? "None" : getToppings().toString(),
+                    price()
+            );
+        } catch (Exception e) {
+            return "Error displaying pizza details: " + e.getMessage();
+        }
     }
 }
