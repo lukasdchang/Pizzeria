@@ -28,8 +28,8 @@
 
     <ImageView
         android:id="@+id/pizzaImageView"
-        android:layout_width="220dp"
-        android:layout_height="220dp"
+        android:layout_width="184dp"
+        android:layout_height="170dp"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="16dp" />
@@ -131,5 +131,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/build_your_own_add_to_order" />
+        android:backgroundTint="@color/red_500"
+        android:text="@string/build_your_own_add_to_order"
+        android:textColor="#EFE4E4" />
 </LinearLayout>

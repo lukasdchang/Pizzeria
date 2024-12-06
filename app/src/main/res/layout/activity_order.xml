@@ -114,7 +114,9 @@
         android:id="@+id/placeOrderButton"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:text="@string/order_place_order" />
+        android:backgroundTint="@color/red_500"
+        android:text="@string/order_place_order"
+        android:textColor="#FFFFFF" />
 
     <LinearLayout
         android:layout_width="match_parent"
