@@ -42,13 +42,13 @@ public class OrderActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        // Initialize order
-        initializeOrder();
+        // Use the existing order from GlobalData
+        currentOrder = GlobalData.getCurrentOrder();
 
-        // Set up RecyclerView
+        // Set up RecyclerView and other components
         setupRecyclerView();
-
-        // Set button listeners
+        updateOrderNumber();
+        updateTotals();
         setupButtonListeners();
     }
 
@@ -117,8 +117,9 @@ public class OrderActivity extends AppCompatActivity {
             intent.putExtra("order", currentOrder);
             startActivity(intent);
 
-            currentOrder = new Order();
-            pizzaAdapter.updatePizzas(new ArrayList<>(currentOrder.getPizzas()));
+            // Reset the order only after placing it
+            GlobalData.resetCurrentOrder();
+            pizzaAdapter.updatePizzas(new ArrayList<>(GlobalData.getCurrentOrder().getPizzas()));
             updateOrderNumber();
             updateTotals();
         } else {

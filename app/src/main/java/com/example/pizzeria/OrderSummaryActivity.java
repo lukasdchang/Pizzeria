@@ -78,7 +78,7 @@ public class OrderSummaryActivity extends AppCompatActivity {
 
     private void initializeData() {
         // Retrieve orders from a global data source or in-memory simulation
-        orders = GlobalData.getOrders(); // Replace with actual data source when implemented
+        orders = GlobalData.getPlacedOrders(); // Replace with actual data source when implemented
 
         // Populate order numbers
         orderNumbers = new ArrayList<>();

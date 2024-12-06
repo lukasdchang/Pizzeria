@@ -1,55 +1,78 @@
 package com.example.pizzeria;
 
 import com.example.pizzeria.models.Order;
-import com.example.pizzeria.models.Pizza;
-import com.example.pizzeria.models.Crust;
-import com.example.pizzeria.models.Size;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * GlobalData is a utility class for managing global application data,
+ * such as the current order and the list of placed orders.
+ */
 public class GlobalData {
-    private static List<Order> orders = new ArrayList<>();
 
-    // Initialize with dummy data for testing purposes
+    // List to store all placed orders
+    private static List<Order> placedOrders = new ArrayList<>();
 
-    static {
-        for (int i = 1; i <= 5; i++) {
-            Order order = new Order();
-            order.addPizza(new Pizza(Crust.THIN, Size.SMALL, "Style " + i) {
-                @Override
-                public double price() {
-                    return 12.99;
-                }
-            });
-            orders.add(order);
+    // Singleton instance for the current order
+    private static Order currentOrder = null;
+
+    /**
+     * Gets the current order. If no current order exists, it creates a new one.
+     *
+     * @return the current order
+     */
+    public static Order getCurrentOrder() {
+        if (currentOrder == null) {
+            currentOrder = new Order();
+        }
+        return currentOrder;
+    }
+
+    /**
+     * Resets the current order by creating a new one.
+     * This should be called after placing an order.
+     */
+    public static void resetCurrentOrder() {
+        currentOrder = new Order();
+    }
+
+    /**
+     * Adds the current order to the list of placed orders and resets the current order.
+     */
+    public static void placeCurrentOrder() {
+        if (currentOrder != null && !currentOrder.getPizzas().isEmpty()) {
+            placedOrders.add(currentOrder);
+            resetCurrentOrder();
         }
     }
 
     /**
-     * Returns the list of orders.
+     * Gets the list of all placed orders.
      *
-     * @return a list of orders
+     * @return the list of placed orders
      */
-    public static List<Order> getOrders() {
-        return orders;
+    public static List<Order> getPlacedOrders() {
+        return placedOrders;
     }
 
     /**
-     * Adds a new order to the global list.
+     * Adds an order to the list of placed orders. Useful for testing or restoring orders.
      *
      * @param order the order to add
      */
-    public static void addOrder(Order order) {
-        orders.add(order);
+    public static void addPlacedOrder(Order order) {
+        if (order != null) {
+            placedOrders.add(order);
+        }
     }
 
     /**
-     * Removes an order from the global list.
+     * Removes an order from the list of placed orders.
      *
      * @param order the order to remove
      */
-    public static void removeOrder(Order order) {
-        orders.remove(order);
+    public static void removePlacedOrder(Order order) {
+        placedOrders.remove(order);
     }
 }
