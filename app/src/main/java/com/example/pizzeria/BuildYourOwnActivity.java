@@ -296,12 +296,9 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         }
 
         if (pizza != null) {
-            // Add pizza to the current order and show confirmation
-            if (currentOrder == null) {
-                currentOrder = new Order();
-            }
+            Order currentOrder = GlobalData.getCurrentOrder();
             currentOrder.addPizza(pizza);
-            GlobalData.addPlacedOrder(currentOrder);
+
 
             showToast("Pizza has been added to your order.");
         } else {
