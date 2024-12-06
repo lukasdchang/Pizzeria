@@ -252,7 +252,61 @@ public class BuildYourOwnActivity extends AppCompatActivity {
     }
 
     private void handleAddToOrder() {
-        // Add pizza to current order
+        // Determine the selected size using the RadioButton
+        Size selectedSize;
+        if (smallRadio.isChecked()) {
+            selectedSize = Size.SMALL;
+        } else if (mediumRadio.isChecked()) {
+            selectedSize = Size.MEDIUM;
+        } else {
+            selectedSize = Size.LARGE;
+        }
+
+        Pizza pizza = null; // Initialize a Pizza object
+        String selectedType = pizzaTypeSpinner.getSelectedItem().toString(); // Get selected type from Spinner
+
+        try {
+            if ("Build your own".equals(selectedType)) {
+                // Handle "Build Your Own" pizza type
+                String crustText = crustTextView.getText().toString().toUpperCase().replace(" ", "_").replace("-", "_");
+
+                pizza = new BuildYourOwn(Crust.valueOf(crustText), selectedSize, style);
+                // Add selected toppings
+                ((BuildYourOwn) pizza).getToppings().addAll(selectedToppings);
+            } else {
+                // Handle preset pizzas
+                switch (selectedType) {
+                    case "BBQ Chicken":
+                        pizza = pizzaFactory.createBBQChicken();
+                        break;
+                    case "Deluxe":
+                        pizza = pizzaFactory.createDeluxe();
+                        break;
+                    case "Meatzza":
+                        pizza = pizzaFactory.createMeatzza();
+                        break;
+                }
+                if (pizza != null) {
+                    pizza.setSize(selectedSize);
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            showAlert("Invalid Crust", "The selected crust type is not valid.");
+            return;
+        }
+
+        if (pizza != null) {
+            // Add pizza to the current order and show confirmation
+            if (currentOrder == null) {
+                currentOrder = new Order();
+            }
+            currentOrder.addPizza(pizza);
+            GlobalData.addOrder(currentOrder);
+
+            showToast("Pizza has been added to your order.");
+        } else {
+            showAlert("Error", "Failed to add pizza to the order.");
+        }
     }
 
     private void updateCrustText() {
