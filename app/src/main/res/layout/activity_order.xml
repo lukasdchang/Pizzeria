@@ -4,26 +4,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#d1e0ff">
+    android:background="#9AFFF0A7">
 
     <!-- Order Number Label -->
     <TextView
         android:id="@+id/orderNumberLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Order Number: "
+        android:text="@string/order_number"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp" />
 
     <!-- RecyclerView to display ordered pizzas -->
+
+    <!-- Totals Section -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/orderRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_height="384dp"
+        android:layout_marginBottom="16dp"
+        android:background="#FAFAFA" />
 
-    <!-- Totals Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,14 +42,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Subtotal: "
+                android:text="@string/order_subtotal_label"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/subtotalLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$0.00"
+                android:text="@string/order_price_placeholder"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -61,14 +63,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sales Tax: "
+                android:text="@string/order_tax_label"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/salesTaxLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$0.00"
+                android:text="@string/order_price_placeholder"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -81,19 +83,39 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Order Total: "
+                android:text="@string/order_total"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/orderTotalLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$0.00"
+                android:text="@string/order_price_placeholder"
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 
     <!-- Buttons Section -->
+    <Button
+        android:id="@+id/removePizzaButton"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/order_remove_pizza" />
+
+    <Button
+        android:id="@+id/clearOrderButton"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/order_clear_order" />
+
+    <Button
+        android:id="@+id/placeOrderButton"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:text="@string/order_place_order" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -101,26 +123,9 @@
         android:gravity="end">
 
         <!-- Remove Pizza Button -->
-        <Button
-            android:id="@+id/removePizzaButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Remove Pizza"
-            android:layout_marginEnd="8dp" />
 
         <!-- Clear Order Button -->
-        <Button
-            android:id="@+id/clearOrderButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Clear Order"
-            android:layout_marginEnd="8dp" />
 
         <!-- Place Order Button -->
-        <Button
-            android:id="@+id/placeOrderButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Place Order" />
     </LinearLayout>
 </LinearLayout>

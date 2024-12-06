@@ -24,12 +24,15 @@
 
     <!-- Order Strings -->
     <string name="order_title">Order</string>
-    <string name="order_subtotal_label">Subtotal:</string>
-    <string name="order_tax_label">Sales Tax:</string>
+    <string name="order_subtotal_label">Subtotal: </string>
+    <string name="order_tax_label">Sales Tax: </string>
     <string name="order_total_label">Total:</string>
     <string name="order_remove_pizza">Remove Pizza</string>
     <string name="order_clear_order">Clear Order</string>
     <string name="order_place_order">Place Order</string>
+    <string name="order_number">Order Number: </string>
+    <string name="order_price_placeholder">$0.00</string>
+    <string name="order_total">Order Total: </string>
 
     <!-- Order Summary Strings -->
     <string name="order_summary_title">Order Summary</string>
