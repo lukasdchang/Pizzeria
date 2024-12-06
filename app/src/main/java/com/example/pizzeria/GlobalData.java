@@ -6,6 +6,7 @@ import com.example.pizzeria.models.Pizza;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * GlobalData is a utility class for managing global application data,
  * such as the current order and the list of placed orders.
