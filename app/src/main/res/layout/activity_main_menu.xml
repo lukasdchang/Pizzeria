@@ -36,9 +36,9 @@
                 android:id="@+id/chicagoStyleButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_background"
+                android:background="@drawable/vec_button_background"
                 android:scaleType="centerCrop"
-                android:src="@drawable/chicago_style" />
+                android:src="@drawable/img_chicago_style" />
 
             <!-- Black Transparent Overlay -->
             <View
@@ -68,9 +68,9 @@
                 android:id="@+id/nyStyleButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_background"
+                android:background="@drawable/vec_button_background"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ny_style" />
+                android:src="@drawable/img_ny_style" />
 
             <!-- Black Transparent Overlay -->
             <View
@@ -123,11 +123,11 @@
                 android:id="@+id/ordersPlacedButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_background"
+                android:background="@drawable/vec_button_background"
                 android:paddingTop="20dp"
                 android:paddingBottom="60dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/orders_summary" />
+                android:src="@drawable/img_orders_summary" />
 
             <View
                 android:layout_width="match_parent"
@@ -159,11 +159,11 @@
                 android:id="@+id/currentOrderButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_background"
+                android:background="@drawable/vec_button_background"
                 android:paddingTop="20dp"
                 android:paddingBottom="60dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/current_order" />
+                android:src="@drawable/img_current_order" />
 
             <!-- Black Transparent Overlay -->
             <View

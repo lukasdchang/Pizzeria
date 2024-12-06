@@ -75,6 +75,8 @@ public class BuildYourOwnActivity extends AppCompatActivity {
 
         // Set up event listeners
         setupEventListeners();
+
+        updatePizzaImage();
     }
 
     @Override
@@ -243,8 +245,9 @@ public class BuildYourOwnActivity extends AppCompatActivity {
             }
         }
 
-        updateCrustText();
+        // Update the image when the type is selected
         updatePizzaImage();
+        updateCrustText();
         updatePrice();
     }
 
@@ -288,13 +291,24 @@ public class BuildYourOwnActivity extends AppCompatActivity {
     }
 
     private void updatePizzaImage() {
+        // Get the selected pizza type from the Spinner
         String selectedType = pizzaTypeSpinner.getSelectedItem().toString().toLowerCase().replace(" ", "");
-        String imagePath = String.format("drawable/%s_%s", selectedType, style.toLowerCase());
-        try {
-            int imageResId = getResources().getIdentifier(imagePath, null, getPackageName());
+
+        // Use the current style (e.g., "Chicago" or "NY")
+        String currentStyle = style.toLowerCase();
+
+        // Build the image name based on the naming convention
+        String imageName = String.format("img_%s_%s", selectedType, currentStyle);
+
+        // Retrieve the resource ID of the image
+        int imageResId = getResources().getIdentifier(imageName, "drawable", getPackageName());
+
+        // Check if the resource exists and set the ImageView
+        if (imageResId != 0) {
             pizzaImageView.setImageResource(imageResId);
-        } catch (Exception e) {
-            //pizzaImageView.setImageResource(R.drawable.placeholder); // Default placeholder
+        } else {
+            // Fallback: If the image is missing, set a default placeholder image
+            pizzaImageView.setImageResource(R.drawable.placeholder); // Add a placeholder image in `drawable`
         }
     }
 
