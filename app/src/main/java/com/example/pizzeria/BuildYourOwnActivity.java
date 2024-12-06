@@ -252,7 +252,7 @@ public class BuildYourOwnActivity extends AppCompatActivity {
     }
 
     private void handleAddToOrder() {
-        // Determine the selected size using the RadioButtons
+        // Determine the selected size using the RadioButton
         Size selectedSize;
         if (smallRadio.isChecked()) {
             selectedSize = Size.SMALL;
