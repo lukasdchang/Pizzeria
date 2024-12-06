@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,13 +27,12 @@ import java.util.List;
 public class OrderSummaryActivity extends AppCompatActivity {
 
     private Spinner orderNumberDropdown;
-    private RecyclerView orderDetailsRecyclerView;
+    private ListView orderDetailsListView;
     private TextView orderTotalLabel;
     private Button cancelOrderButton, exportOrdersButton;
 
     private List<Order> orders;
     private List<Integer> orderNumbers;
-    private PizzaAdapter pizzaAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,7 @@ public class OrderSummaryActivity extends AppCompatActivity {
 
     private void initializeUIComponents() {
         orderNumberDropdown = findViewById(R.id.orderNumberDropdown);
-        orderDetailsRecyclerView = findViewById(R.id.orderDetailsRecyclerView);
+        orderDetailsListView = findViewById(R.id.orderDetailsListView);
         orderTotalLabel = findViewById(R.id.orderTotalLabel);
         cancelOrderButton = findViewById(R.id.cancelOrderButton);
         exportOrdersButton = findViewById(R.id.exportOrdersButton);
@@ -118,30 +118,58 @@ public class OrderSummaryActivity extends AppCompatActivity {
     private void handleOrderSelection(int orderNumber) {
         Order selectedOrder = findOrderByNumber(orderNumber);
         if (selectedOrder != null) {
-            pizzaAdapter = new PizzaAdapter(this, selectedOrder.getPizzas());
-            orderDetailsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            orderDetailsRecyclerView.setAdapter(pizzaAdapter);
+            // Convert pizzas to a string list for the ListView
+            List<String> pizzaDescriptions = new ArrayList<>();
+            for (Pizza pizza : selectedOrder.getPizzas()) {
+                pizzaDescriptions.add(pizza.toString());
+            }
 
+            // Set up the ListView adapter
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    this,
+                    android.R.layout.simple_list_item_1, // Use a built-in simple layout
+                    pizzaDescriptions
+            );
+            orderDetailsListView.setAdapter(adapter);
+
+            // Update the total with tax
             double totalWithTax = selectedOrder.calculateTotalWithTax();
-            orderTotalLabel.setText(String.format("$%.2f", totalWithTax));
+            orderTotalLabel.setText(String.format("Order Total: $%.2f", totalWithTax));
         }
     }
 
     private void handleCancelOrder() {
-        int selectedOrderNumber = (int) orderNumberDropdown.getSelectedItem();
+        // Get the selected order number from the dropdown
+        Integer selectedOrderNumber = (Integer) orderNumberDropdown.getSelectedItem();
+        if (selectedOrderNumber == null) {
+            showAlert("Error", "No order selected.");
+            return;
+        }
+
+        // Find the order to remove
         Order orderToRemove = findOrderByNumber(selectedOrderNumber);
         if (orderToRemove != null) {
+            // Remove the order from the lists
             orders.remove(orderToRemove);
-            orderNumbers.remove(Integer.valueOf(selectedOrderNumber));
+            orderNumbers.remove(selectedOrderNumber);
 
+            // Show confirmation message
             Toast.makeText(this, "Order " + selectedOrderNumber + " canceled.", Toast.LENGTH_SHORT).show();
 
-            // Refresh UI
+            // Refresh the dropdown
             setupOrderDropdown();
-            orderDetailsRecyclerView.setAdapter(null);
-            orderTotalLabel.setText("$0.00");
+
+            // Clear the ListView and reset the total label
+            ArrayAdapter<String> emptyAdapter = new ArrayAdapter<>(
+                    this,
+                    android.R.layout.simple_list_item_1,
+                    new ArrayList<>()
+            );
+            orderDetailsListView.setAdapter(emptyAdapter);
+
+            orderTotalLabel.setText("Order Total: $0.00");
         } else {
-            showAlert("Error", "No order selected.");
+            showAlert("Error", "Order not found.");
         }
     }
 

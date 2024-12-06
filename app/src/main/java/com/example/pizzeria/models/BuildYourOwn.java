@@ -44,6 +44,10 @@ public class BuildYourOwn extends Pizza {
         }
     }
 
+    public String getType() {
+        return "Build Your Own";
+    }
+
     /**
      * Calculates the price of the "Build Your Own" pizza based on its size
      * and the number of toppings added.
@@ -81,12 +85,13 @@ public class BuildYourOwn extends Pizza {
         try {
             return String.format(
                     Locale.US, // Specify the desired locale
-                    "%s %s (%s): Toppings: %s | Price: $%.2f",
-                    getSize(),
-                    getCrust(),
-                    getStyle(),
-                    getToppings().isEmpty() ? "None" : getToppings().toString(),
-                    price()
+                    "%s (%s), %s %s, Toppings: %s | Price: $%.2f",
+                    getType(),                  // Pizza type (e.g., "Build Your Own")
+                    getStyle(),                 // Style (e.g., "Chicago")
+                    getSize(),                  // Size (e.g., "MEDIUM")
+                    getCrust(),                 // Crust (e.g., "PAN")
+                    getToppings().isEmpty() ? "None" : getToppings().toString(), // Toppings or "None"
+                    price()                     // Calculated price
             );
         } catch (Exception e) {
             return "Error displaying pizza details: " + e.getMessage();

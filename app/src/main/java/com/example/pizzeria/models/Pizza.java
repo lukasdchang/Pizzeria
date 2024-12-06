@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Represents a generic Pizza with customizable toppings, crust, and size.
@@ -108,6 +109,10 @@ public abstract class Pizza implements Parcelable {
         return this.style;
     }
 
+    public String getType() {
+        return this.getClass().getSimpleName();
+    }
+
     /**
      * Abstract method to calculate the price of the pizza.
      * Must be implemented by subclasses.
@@ -124,12 +129,20 @@ public abstract class Pizza implements Parcelable {
      */
     @Override
     public String toString() {
-        return String.format("%s (%s), %s, %s, $%.2f",
-                this.getClass().getSimpleName(),
-                this.getCrust(),
-                this.style,
-                String.join(", ", getToppings().stream().map(Enum::name).toArray(String[]::new)),
-                this.price());
+        try {
+            return String.format(
+                    Locale.US, // Specify the desired locale
+                    "%s (%s), %s %s, Toppings: %s | Price: $%.2f",
+                    getType(),                  // Pizza type (e.g., "Deluxe", "Meatzza")
+                    getStyle(),                 // Style (e.g., "Chicago Style")
+                    getSize(),                  // Size (e.g., "MEDIUM")
+                    getCrust(),                 // Crust (e.g., "PAN")
+                    getToppings().isEmpty() ? "None" : getToppings().toString(), // Toppings or "None"
+                    price()                     // Calculated price
+            );
+        } catch (Exception e) {
+            return "Error displaying pizza details: " + e.getMessage();
+        }
     }
 
     /**

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#9AFFF0A7"
     android:padding="16dp">
 
     <!-- Order Number Dropdown -->
@@ -12,40 +13,42 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp" />
 
-    <!-- RecyclerView to Display Pizza Details -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/orderDetailsRecyclerView"
+    <!-- ListView to Display Pizza Details -->
+    <ListView
+        android:id="@+id/orderDetailsListView"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_height="555dp"
+        android:layout_marginBottom="16dp"
+        android:background="#FFFFFF" />
 
     <!-- Order Total -->
     <TextView
         android:id="@+id/orderTotalLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="Order Total: $0.00"
-        android:textSize="18sp"
-        android:layout_marginBottom="16dp" />
+        android:textSize="18sp" />
 
     <!-- Buttons -->
+    <Button
+        android:id="@+id/cancelOrderButton"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Cancel Order" />
+
+    <Button
+        android:id="@+id/exportOrdersButton"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:text="Export Orders" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end">
+        android:gravity="end"
+        android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/cancelOrderButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cancel Order"
-            android:layout_marginEnd="8dp" />
-
-        <Button
-            android:id="@+id/exportOrdersButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Export Orders" />
     </LinearLayout>
 </LinearLayout>
