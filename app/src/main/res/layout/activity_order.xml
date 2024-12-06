@@ -121,11 +121,5 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="end">
-
-        <!-- Remove Pizza Button -->
-
-        <!-- Clear Order Button -->
-
-        <!-- Place Order Button -->
     </LinearLayout>
 </LinearLayout>

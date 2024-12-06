@@ -18,7 +18,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="4dp"
             android:paddingBottom="0dp"
-            android:text="placeholder"
+            android:text="@string/build_your_own_placeholder"
             android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -131,5 +131,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Add to Order" />
+        android:text="@string/build_your_own_add_to_order" />
 </LinearLayout>
