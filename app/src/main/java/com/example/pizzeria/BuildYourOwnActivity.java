@@ -301,7 +301,7 @@ public class BuildYourOwnActivity extends AppCompatActivity {
                 currentOrder = new Order();
             }
             currentOrder.addPizza(pizza);
-            GlobalData.addOrder(currentOrder);
+            GlobalData.addPlacedOrder(currentOrder);
 
             showToast("Pizza has been added to your order.");
         } else {
