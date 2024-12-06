@@ -8,6 +8,8 @@ import java.util.Arrays;
  * pepperoni, green pepper, onion, and mushroom by default.
  *
  * This class extends the abstract Pizza class.
+ *
+ * @author Yousef Naam & Lukas Chang
  */
 public class Deluxe extends Pizza {
 

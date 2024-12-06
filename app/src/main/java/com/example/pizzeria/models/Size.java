@@ -9,6 +9,8 @@ import android.os.Parcelable;
  * Implements Parcelable for compatibility with Android's inter-Activity communication.
  * Each size can have associated pricing or other attributes depending
  * on the pizza implementation.
+ *
+ * @author Yousef Naam & Lukas Chang
  */
 public enum Size implements Parcelable {
     SMALL,

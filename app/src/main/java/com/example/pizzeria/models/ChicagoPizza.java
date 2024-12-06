@@ -5,6 +5,8 @@ package com.example.pizzeria.models;
  * Implements the PizzaFactory interface to provide specific
  * methods for creating different types of pizzas with Chicago-style crusts.
  * By default, pizzas created by this factory use a medium size.
+ *
+ * @author Yousef Naam & Lukas Chang
  */
 public class ChicagoPizza implements PizzaFactory {
 

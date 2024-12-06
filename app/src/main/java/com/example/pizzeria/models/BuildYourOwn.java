@@ -7,6 +7,8 @@ import java.util.Locale;
  * to select their desired toppings. The price is determined based on the
  * size of the pizza and the number of toppings.
  * This class extends the abstract Pizza class.
+ *
+ * @author Yousef Naam & Lukas Chang
  */
 public class BuildYourOwn extends Pizza {
 

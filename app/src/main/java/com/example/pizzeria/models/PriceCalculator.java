@@ -15,6 +15,8 @@ import java.util.List;
  *
  * This class cannot be instantiated and relies solely on the static method
  * `calculatePrice`.
+ *
+ * @author Yousef Naam & Lukas Chang
  */
 public final class PriceCalculator {
 

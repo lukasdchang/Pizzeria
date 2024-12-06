@@ -8,6 +8,8 @@ import java.util.Arrays;
  *
  * The Meatzza pizza includes toppings such as sausage, pepperoni, beef, and ham.
  * This class extends the abstract Pizza class.
+ *
+ * @author Yousef Naam & Lukas Chang
  */
 public class Meatzza extends Pizza {
 

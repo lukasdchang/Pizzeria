@@ -12,6 +12,8 @@ import java.util.List;
  * Provides functionality to add and remove pizzas, calculate the
  * total price, and include sales tax for the order.
  * This class implements Parcelable for use with Android Intents.
+ *
+ * @author Yousef Naam & Lukas Chang
  */
 public class Order implements Parcelable {
     private static int orderCounter = 1; // Static counter to generate unique order numbers

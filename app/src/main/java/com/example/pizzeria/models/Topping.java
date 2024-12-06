@@ -8,6 +8,8 @@ import android.os.Parcelable;
  *
  * Implements Parcelable for compatibility with Android's inter-Activity communication.
  * Each topping can be passed as part of a Pizza object using Intents or Bundles.
+ *
+ * @author Yousef Naam & Lukas Chang
  */
 public enum Topping implements Parcelable {
     SAUSAGE,

@@ -9,13 +9,11 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.pizzeria.adapters.PizzaAdapter;
 import com.example.pizzeria.models.Order;
 import com.example.pizzeria.models.Pizza;
 
@@ -24,16 +22,40 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * OrderSummaryActivity displays a summary of all placed orders.
+ * Users can:
+ * - View order details for selected orders.
+ * - Cancel a specific order.
+ * - Export all orders to a text file.
+ *
+ * This activity retrieves data from a global data source and updates the UI dynamically.
+ * It includes a Spinner for order selection, a ListView for displaying order details,
+ * and buttons for order management.
+ *
+ * File export functionality allows saving order summaries to a text file.
+ *
+ * @author You
+ */
 public class OrderSummaryActivity extends AppCompatActivity {
 
+    // UI Components
     private Spinner orderNumberDropdown;
     private ListView orderDetailsListView;
     private TextView orderTotalLabel;
     private Button cancelOrderButton, exportOrdersButton;
 
+    // Data Models
     private List<Order> orders;
     private List<Integer> orderNumbers;
 
+    /**
+     * Initializes the activity, sets up the UI components, and populates order data.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *                           previously being shut down, this contains the data
+     *                           it most recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,16 +80,24 @@ public class OrderSummaryActivity extends AppCompatActivity {
         setupButtonListeners();
     }
 
+    /**
+     * Handles the action bar's back button click to close the activity and return to the previous screen.
+     *
+     * @param item the selected menu item
+     * @return true if the action is handled, false otherwise
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            // Handle the back button click
             finish(); // Closes this activity and returns to the previous one
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Initializes UI components by linking them to their XML counterparts.
+     */
     private void initializeUIComponents() {
         orderNumberDropdown = findViewById(R.id.orderNumberDropdown);
         orderDetailsListView = findViewById(R.id.orderDetailsListView);
@@ -76,12 +106,14 @@ public class OrderSummaryActivity extends AppCompatActivity {
         exportOrdersButton = findViewById(R.id.exportOrdersButton);
     }
 
+    /**
+     * Initializes order data from the global data source.
+     * Retrieves placed orders and populates a list of order numbers for the dropdown menu.
+     */
     private void initializeData() {
-        // Retrieve orders from a global data source or in-memory simulation
-        orders = GlobalData.getPlacedOrders(); // Replace with actual data source when implemented
-
-        // Populate order numbers
+        orders = GlobalData.getPlacedOrders(); // Retrieve placed orders from the global data source
         orderNumbers = new ArrayList<>();
+
         for (Order order : orders) {
             orderNumbers.add(order.getOrderNumber());
         }
@@ -91,6 +123,9 @@ public class OrderSummaryActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sets up the Spinner dropdown menu with order numbers.
+     */
     private void setupOrderDropdown() {
         ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, orderNumbers);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -110,11 +145,20 @@ public class OrderSummaryActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sets up button listeners for canceling orders and exporting order summaries.
+     */
     private void setupButtonListeners() {
         cancelOrderButton.setOnClickListener(v -> handleCancelOrder());
         exportOrdersButton.setOnClickListener(v -> handleExportOrders());
     }
 
+    /**
+     * Handles the selection of an order from the dropdown menu.
+     * Displays the order's details in the ListView and updates the total amount with tax.
+     *
+     * @param orderNumber The selected order's number
+     */
     private void handleOrderSelection(int orderNumber) {
         Order selectedOrder = findOrderByNumber(orderNumber);
         if (selectedOrder != null) {
@@ -127,7 +171,7 @@ public class OrderSummaryActivity extends AppCompatActivity {
             // Set up the ListView adapter
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     this,
-                    android.R.layout.simple_list_item_1, // Use a built-in simple layout
+                    android.R.layout.simple_list_item_1,
                     pizzaDescriptions
             );
             orderDetailsListView.setAdapter(adapter);
@@ -138,41 +182,37 @@ public class OrderSummaryActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handles the cancellation of the selected order.
+     * Removes the order from the global data and updates the UI.
+     */
     private void handleCancelOrder() {
-        // Get the selected order number from the dropdown
         Integer selectedOrderNumber = (Integer) orderNumberDropdown.getSelectedItem();
         if (selectedOrderNumber == null) {
             showAlert("Error", "No order selected.");
             return;
         }
 
-        // Find the order to remove
         Order orderToRemove = findOrderByNumber(selectedOrderNumber);
         if (orderToRemove != null) {
-            // Remove the order from the lists
             orders.remove(orderToRemove);
             orderNumbers.remove(selectedOrderNumber);
 
-            // Show confirmation message
             Toast.makeText(this, "Order " + selectedOrderNumber + " canceled.", Toast.LENGTH_SHORT).show();
 
-            // Refresh the dropdown
             setupOrderDropdown();
 
             // Clear the ListView and reset the total label
-            ArrayAdapter<String> emptyAdapter = new ArrayAdapter<>(
-                    this,
-                    android.R.layout.simple_list_item_1,
-                    new ArrayList<>()
-            );
-            orderDetailsListView.setAdapter(emptyAdapter);
-
+            orderDetailsListView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<>()));
             orderTotalLabel.setText("Order Total: $0.00");
         } else {
             showAlert("Error", "Order not found.");
         }
     }
 
+    /**
+     * Handles the export of all orders to a text file in the app's internal storage.
+     */
     private void handleExportOrders() {
         if (orders.isEmpty()) {
             showAlert("No Orders", "There are no orders to export.");
@@ -195,6 +235,12 @@ public class OrderSummaryActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Finds an order by its number.
+     *
+     * @param orderNumber The order number to search for
+     * @return The matching Order object, or null if not found
+     */
     private Order findOrderByNumber(int orderNumber) {
         for (Order order : orders) {
             if (order.getOrderNumber() == orderNumber) {
@@ -204,6 +250,12 @@ public class OrderSummaryActivity extends AppCompatActivity {
         return null;
     }
 
+    /**
+     * Displays an alert dialog with the specified title and message.
+     *
+     * @param title   The title of the alert
+     * @param message The message content of the alert
+     */
     private void showAlert(String title, String message) {
         new AlertDialog.Builder(this)
                 .setTitle(title)

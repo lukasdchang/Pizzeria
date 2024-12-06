@@ -8,6 +8,8 @@ package com.example.pizzeria.models;
  * By default, pizzas created by this factory use a medium size.
  * This factory supports creating Deluxe, BBQ Chicken, Meatzza,
  * and Build Your Own pizzas with New York-style crusts.
+ *
+ * @author Yousef Naam & Lukas Chang
  */
 public class NYPizza implements PizzaFactory {
 

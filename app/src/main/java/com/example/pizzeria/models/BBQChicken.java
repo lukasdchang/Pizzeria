@@ -6,6 +6,8 @@ import java.util.Arrays;
  * Represents a BBQ Chicken Pizza, which is a specific type of pizza with
  * predefined toppings and pricing based on size.
  * This class extends the abstract Pizza class.
+ *
+ * @author Yousef Naam & Lukas Chang
  */
 public class BBQChicken extends Pizza {
 

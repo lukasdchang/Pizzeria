@@ -9,6 +9,8 @@ import android.os.Parcelable;
  * This can vary between Chicago-style and New York-style pizzas.
  *
  * Implements Parcelable for compatibility with Android's inter-Activity communication.
+ *
+ * @author Yousef Naam & Lukas Chang
  */
 public enum Crust implements Parcelable {
     DEEP_DISH,        // Chicago-style crust for Deluxe pizza

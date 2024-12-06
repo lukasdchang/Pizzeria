@@ -17,9 +17,26 @@ import com.example.pizzeria.models.Pizza;
 
 import java.util.ArrayList;
 
+/**
+ * OrderActivity handles the user's current order. It provides functionality
+ * for viewing the order, removing pizzas, clearing the order, and placing the
+ * order. The activity dynamically updates the order details including subtotal,
+ * sales tax, and total amount.
+ *
+ * UI Components:
+ * - RecyclerView for displaying pizzas in the order
+ * - Buttons for removing a pizza, clearing the order, and placing the order
+ * - TextViews for showing order details (order number, subtotal, sales tax, total)
+ *
+ * This activity integrates with the GlobalData class to manage the current order.
+ *
+ * Sales Tax: 6.625% (New Jersey sales tax).
+ *
+ * @author Yousef Naam and Lukas Chang
+ */
 public class OrderActivity extends AppCompatActivity {
 
-    private static final double SALES_TAX_RATE = 0.06625; // New Jersey sales tax
+    private static final double SALES_TAX_RATE = 0.06625; // New Jersey sales tax rate
 
     // UI components
     private TextView orderNumberLabel;
@@ -30,6 +47,14 @@ public class OrderActivity extends AppCompatActivity {
     private PizzaAdapter pizzaAdapter; // Adapter for RecyclerView
     private Order currentOrder; // Current order object
 
+    /**
+     * Called when the activity is first created. Sets up the UI components,
+     * initializes the RecyclerView, and configures button listeners.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *                           previously being shut down, this contains the data
+     *                           it most recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +78,12 @@ public class OrderActivity extends AppCompatActivity {
         setupButtonListeners();
     }
 
+    /**
+     * Handles the action bar's back button click to navigate to the main menu.
+     *
+     * @param item the selected menu item
+     * @return true if the home action is handled; otherwise, false
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -90,7 +121,8 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     /**
-     * Sets up the button listeners for remove, clear, and place order actions.
+     * Sets up the button listeners for removing a pizza, clearing the order,
+     * and placing the order.
      */
     private void setupButtonListeners() {
         removePizzaButton.setOnClickListener(v -> handleRemovePizza());
@@ -124,7 +156,7 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     /**
-     * Handles placing the order and resetting for a new order.
+     * Handles placing the current order and resetting the UI for a new order.
      */
     private void handlePlaceOrder() {
         if (!currentOrder.getPizzas().isEmpty()) {
@@ -151,7 +183,7 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     /**
-     * Updates the order number label.
+     * Updates the order number label with the current order's number.
      */
     private void updateOrderNumber() {
         orderNumberLabel.setText("Order Number: " + currentOrder.getOrderNumber());
@@ -173,8 +205,8 @@ public class OrderActivity extends AppCompatActivity {
     /**
      * Displays an alert dialog with the specified title and message.
      *
-     * @param title   the title of the alert
-     * @param message the message content of the alert
+     * @param title   the title of the alert dialog
+     * @param message the message content of the alert dialog
      */
     private void showAlert(String title, String message) {
         new AlertDialog.Builder(this)

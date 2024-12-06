@@ -17,6 +17,8 @@ import java.util.Locale;
  *
  * Parcelable implementation enables Pizza objects to be passed between
  * Android Activities via Intents or Bundles.
+ *
+ * @author Yousef Naam & Lukas Chang
  */
 public abstract class Pizza implements Parcelable {
     private ArrayList<Topping> toppings; // List of toppings for the pizza
