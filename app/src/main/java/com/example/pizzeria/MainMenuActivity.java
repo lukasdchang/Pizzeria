@@ -13,24 +13,6 @@ public class MainMenuActivity extends AppCompatActivity {
     private ImageButton ordersPlacedButton;
     private ImageButton currentOrderButton;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
-
-        // Initialize UI components as ImageButtons
-        chicagoStyleButton = findViewById(R.id.chicagoStyleButton);
-        nyStyleButton = findViewById(R.id.nyStyleButton);
-        ordersPlacedButton = findViewById(R.id.ordersPlacedButton);
-        currentOrderButton = findViewById(R.id.currentOrderButton);
-
-        // Set button listeners
-        chicagoStyleButton.setOnClickListener(v -> openBuildYourOwnActivity("Chicago Style Pizza - Build Your Own", "Chicago"));
-        nyStyleButton.setOnClickListener(v -> openBuildYourOwnActivity("NY Style Pizza - Build Your Own", "NY"));
-        ordersPlacedButton.setOnClickListener(v -> handleOrderSummary());
-        currentOrderButton.setOnClickListener(v -> handleOrderView());
-    }
-
     /**
      * Opens the "Build Your Own" pizza activity for the specified style.
      *
@@ -58,5 +40,30 @@ public class MainMenuActivity extends AppCompatActivity {
     private void handleOrderView() {
         Intent intent = new Intent(MainMenuActivity.this, OrderActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * Initializes the main menu activity, sets up the UI components, and defines button actions
+     * for navigating to various activities like Build Your Own Pizza, Current Order,
+     * and Order Summary.
+     *
+     * @param savedInstanceState the previously saved instance state, if available
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_menu);
+
+        // Initialize UI components as ImageButtons
+        chicagoStyleButton = findViewById(R.id.chicagoStyleButton);
+        nyStyleButton = findViewById(R.id.nyStyleButton);
+        ordersPlacedButton = findViewById(R.id.ordersPlacedButton);
+        currentOrderButton = findViewById(R.id.currentOrderButton);
+
+        // Set button listeners
+        chicagoStyleButton.setOnClickListener(v -> openBuildYourOwnActivity("Chicago Style Pizza - Build Your Own", "Chicago"));
+        nyStyleButton.setOnClickListener(v -> openBuildYourOwnActivity("NY Style Pizza - Build Your Own", "NY"));
+        ordersPlacedButton.setOnClickListener(v -> handleOrderSummary());
+        currentOrderButton.setOnClickListener(v -> handleOrderView());
     }
 }

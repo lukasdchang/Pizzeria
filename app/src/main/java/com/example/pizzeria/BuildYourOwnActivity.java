@@ -12,12 +12,29 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import java.util.Locale;
-import com.example.pizzeria.R;
 import com.example.pizzeria.models.*;
 import com.example.pizzeria.adapters.*;
 
 import java.util.ArrayList;
 
+/**
+ * Activity for building a custom pizza in the Pizzeria Android application.
+ * This class extends the Android `AppCompatActivity` class and provides
+ * functionality for customizing a pizza, including selecting pizza type, size,
+ * crust, and toppings.
+ *
+ * The activity uses a GUI layout defined in an XML file to allow the user
+ * to interact with the application. Users can choose a pre-set pizza or
+ * build their own pizza by adding and removing toppings.
+ *
+ * Features include:
+ * - Dynamic pizza customization
+ * - Price calculation based on selected options
+ * - Image updates based on pizza type and style
+ * - Adding pizzas to the current order
+ *
+ * @author Yousef & Lukas
+ */
 public class BuildYourOwnActivity extends AppCompatActivity {
 
     private TextView titleLabel;
@@ -33,10 +50,16 @@ public class BuildYourOwnActivity extends AppCompatActivity {
     private ArrayList<Topping> selectedToppings;
     private ToppingsAdapter availableToppingsAdapter, selectedToppingsAdapter;
 
-    private String style = "Chicago"; // Default style
+    private String style = "Chicago";
     private PizzaFactory pizzaFactory;
     private Order currentOrder;
 
+    /**
+     * Initializes the activity, sets up UI components, configures event listeners,
+     * and populates the pizza customization options.
+     *
+     * @param savedInstanceState Saved instance state for activity re-creation.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +102,12 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         updatePizzaImage();
     }
 
+    /**
+     * Handles the back button in the action bar to navigate back to the main menu.
+     *
+     * @param item the selected menu item
+     * @return true if the home action is handled; otherwise, false
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -92,6 +121,9 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Links UI components in the layout to their corresponding variables in the activity.
+     */
     private void initializeUIComponents() {
         titleLabel = findViewById(R.id.titleLabel);
         pizzaImageView = findViewById(R.id.pizzaImageView);
@@ -108,6 +140,10 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         priceTextView = findViewById(R.id.priceTextView);
     }
 
+    /**
+     * Configures the pizza type spinner with options and handles item selection to update
+     * the UI and preselect toppings for preset pizzas or allow custom toppings for "Build Your Own."
+     */
     private void setupPizzaTypeSpinner() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.pizza_types, android.R.layout.simple_spinner_item);
@@ -128,6 +164,12 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Configures the activity's style (Chicago or NY), updates the title,
+     * sets the appropriate pizza factory, and refreshes crust text and pizza image.
+     *
+     * @param style The style of pizza to set (e.g., "Chicago" or "NY").
+     */
     private void setStyle(String style) {
         this.style = style;
         titleLabel.setText(style + " Style Pizza");
@@ -136,6 +178,10 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         updatePizzaImage();
     }
 
+    /**
+     * Populates the available toppings list with predefined topping options
+     * for customization and initializes the selected toppings list.
+     */
     private void populateToppings() {
         availableToppings = new ArrayList<>();
         selectedToppings = new ArrayList<>();
@@ -154,6 +200,10 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         availableToppings.add(Topping.PROVOLONE);
     }
 
+    /**
+     * Configures RecyclerViews for available and selected toppings, including
+     * layout managers and adapters for managing toppings lists.
+     */
     private void setupRecyclerViews() {
         availableToppingsAdapter = new ToppingsAdapter(this, availableToppings, false);
         selectedToppingsAdapter = new ToppingsAdapter(this, selectedToppings, true);
@@ -164,6 +214,11 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         selectedToppingsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         selectedToppingsRecyclerView.setAdapter(selectedToppingsAdapter);
     }
+
+    /**
+     * Configures event listeners for UI components, enabling interaction
+     * for adding/removing toppings, selecting pizza type, and managing price updates.
+     */
     private void setupEventListeners() {
         addToppingButton.setOnClickListener(v -> handleAddTopping());
         removeToppingButton.setOnClickListener(v -> handleRemoveTopping());
@@ -184,6 +239,10 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         largeRadio.setOnClickListener(v -> updatePrice());
     }
 
+    /**
+     * Adds the selected topping to the pizza if it is valid, updates the selected toppings list,
+     * recalculates the price, and shows a confirmation toast.
+     */
     private void handleAddTopping() {
         Topping selected = availableToppingsAdapter.getSelectedTopping();
         if (selected == null) {
@@ -200,6 +259,10 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Removes the selected topping from the list of selected toppings, updates the RecyclerView,
+     * and recalculates the price.
+     */
     private void handleRemoveTopping() {
         Topping selected = selectedToppingsAdapter.getSelectedTopping();
         if (selected != null) {
@@ -209,6 +272,12 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Updates UI and topping selection behavior based on the selected pizza type.
+     * Enables toppings for "Build Your Own" or sets predefined toppings for preset pizzas.
+     *
+     * @param position The index of the selected pizza type in the Spinner.
+     */
     private void handlePizzaTypeSelection(int position) {
         String selectedType = pizzaTypeSpinner.getSelectedItem().toString();
 
@@ -223,9 +292,7 @@ public class BuildYourOwnActivity extends AppCompatActivity {
             availableToppingsAdapter.disableSelection(); // Disable selecting toppings
             availableToppingsRecyclerView.setAlpha(0.5f); // Grey out RecyclerView
             availableToppingsRecyclerView.setEnabled(false); // Disable interaction
-
             selectedToppings.clear();
-
             Pizza presetPizza = null;
             switch (selectedType) {
                 case "BBQ Chicken":
@@ -238,19 +305,21 @@ public class BuildYourOwnActivity extends AppCompatActivity {
                     presetPizza = pizzaFactory.createMeatzza();
                     break;
             }
-
             if (presetPizza != null) {
                 selectedToppings.addAll(presetPizza.getToppings());
                 selectedToppingsAdapter.notifyDataSetChanged();
             }
         }
-
         // Update the image when the type is selected
         updatePizzaImage();
         updateCrustText();
         updatePrice();
     }
 
+    /**
+     * Adds the selected pizza to the current order based on the chosen type, size,
+     * crust, and toppings. Displays a confirmation or error message as needed.
+     */
     private void handleAddToOrder() {
         // Determine the selected size using the RadioButton
         Size selectedSize;
@@ -261,20 +330,14 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         } else {
             selectedSize = Size.LARGE;
         }
-
         Pizza pizza = null; // Initialize a Pizza object
         String selectedType = pizzaTypeSpinner.getSelectedItem().toString(); // Get selected type from Spinner
-
         try {
             if ("Build your own".equals(selectedType)) {
-                // Handle "Build Your Own" pizza type
                 String crustText = crustTextView.getText().toString().toUpperCase().replace(" ", "_").replace("-", "_");
-
                 pizza = new BuildYourOwn(Crust.valueOf(crustText), selectedSize, style);
-                // Add selected toppings
                 ((BuildYourOwn) pizza).getToppings().addAll(selectedToppings);
             } else {
-                // Handle preset pizzas
                 switch (selectedType) {
                     case "BBQ Chicken":
                         pizza = pizzaFactory.createBBQChicken();
@@ -294,18 +357,18 @@ public class BuildYourOwnActivity extends AppCompatActivity {
             showAlert("Invalid Crust", "The selected crust type is not valid.");
             return;
         }
-
         if (pizza != null) {
             Order currentOrder = GlobalData.getCurrentOrder();
             currentOrder.addPizza(pizza);
-
-
             showToast("Pizza has been added to your order.");
         } else {
             showAlert("Error", "Failed to add pizza to the order.");
         }
     }
 
+    /**
+     * Updates the crust text based on the selected pizza type and style (Chicago or NY).
+     */
     private void updateCrustText() {
         String selectedType = pizzaTypeSpinner.getSelectedItem().toString();
         if ("Chicago".equals(style)) {
@@ -341,6 +404,9 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Updates the displayed pizza image based on the selected pizza type and style.
+     */
     private void updatePizzaImage() {
         // Get the selected pizza type from the Spinner
         String selectedType = pizzaTypeSpinner.getSelectedItem().toString().toLowerCase().replace(" ", "");
@@ -363,6 +429,9 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Updates the displayed price based on the selected pizza type, size, and toppings.
+     */
     private void updatePrice() {
         // Get the selected pizza type from the Spinner
         String selectedType = pizzaTypeSpinner.getSelectedItem().toString();
@@ -399,6 +468,12 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         priceTextView.setText(String.format(Locale.getDefault(), "$%.2f", price));
     }
 
+    /**
+     * Displays an alert dialog with the given title and message.
+     *
+     * @param title   The title of the alert dialog.
+     * @param message The message displayed in the alert dialog.
+     */
     private void showAlert(String title, String message) {
         new AlertDialog.Builder(this)
                 .setTitle(title)
@@ -407,6 +482,11 @@ public class BuildYourOwnActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * Displays a short toast message on the screen.
+     *
+     * @param message The message to be displayed in the toast.
+     */
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }

@@ -116,23 +116,42 @@ public class Order implements Parcelable {
                 "Total with Tax: $" + String.format("%.2f", calculateTotalWithTax());
     }
 
-    // Parcelable implementation
+    /**
+     * Constructs an Order object from a Parcel, restoring its order number and list of pizzas.
+     *
+     * @param in The Parcel containing the serialized order data.
+     */
     protected Order(Parcel in) {
         orderNumber = in.readInt();
         pizzas = in.createTypedArrayList(Pizza.CREATOR);
     }
 
+    /**
+     * Writes the Order object's data into a Parcel for serialization.
+     *
+     * @param dest The Parcel where the data is written.
+     * @param flags Flags for how the object should be written (unused in this case).
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(orderNumber);
         dest.writeTypedList(pizzas);
     }
 
+    /**
+     * Describes the contents of the Parcelable object. Typically returns 0.
+     *
+     * @return An integer representing the content description (always 0).
+     */
     @Override
     public int describeContents() {
         return 0;
     }
 
+    /**
+     * Parcelable.Creator implementation for creating Order objects from a Parcel
+     * or an array of Order objects.
+     */
     public static final Creator<Order> CREATOR = new Creator<Order>() {
         @Override
         public Order createFromParcel(Parcel in) {

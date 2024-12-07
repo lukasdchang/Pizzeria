@@ -13,12 +13,12 @@ import android.os.Parcelable;
  * @author Yousef Naam & Lukas Chang
  */
 public enum Crust implements Parcelable {
-    DEEP_DISH,        // Chicago-style crust for Deluxe pizza
-    PAN,              // Chicago-style crust for BBQ Chicken and Build Your Own
-    STUFFED,          // Chicago-style crust for Meatzza
-    BROOKLYN,         // New York-style crust for Deluxe pizza
-    THIN,             // New York-style crust for BBQ Chicken
-    HAND_TOSSED;      // New York-style crust for Meatzza and Build Your Own
+    DEEP_DISH,
+    PAN,
+    STUFFED,
+    BROOKLYN,
+    THIN,
+    HAND_TOSSED;
 
     /**
      * Parcelable implementation: Write the enum value to a Parcel.

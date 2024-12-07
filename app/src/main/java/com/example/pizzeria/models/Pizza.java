@@ -42,7 +42,10 @@ public abstract class Pizza implements Parcelable {
         this.style = style;
     }
 
-    // Parcelable requires a no-arg constructor
+    /**
+     * Default constructor for the Pizza class.
+     * Initializes an empty list of toppings.
+     */
     protected Pizza() {
         this.toppings = new ArrayList<>();
     }
@@ -107,10 +110,20 @@ public abstract class Pizza implements Parcelable {
         return size;
     }
 
+    /**
+     * Retrieves the style of the pizza.
+     *
+     * @return the style of the pizza (e.g., "Chicago Style" or "New York Style").
+     */
     public String getStyle() {
         return this.style;
     }
 
+    /**
+     * Retrieves the type of the pizza as the simple class name.
+     *
+     * @return the type of the pizza (e.g., "BuildYourOwn", "Deluxe").
+     */
     public String getType() {
         return this.getClass().getSimpleName();
     }

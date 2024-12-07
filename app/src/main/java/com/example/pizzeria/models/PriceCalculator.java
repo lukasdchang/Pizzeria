@@ -41,7 +41,10 @@ public final class PriceCalculator {
     private static final double BASE_PRICE_MEATZZA_MEDIUM = 19.99;
     private static final double BASE_PRICE_MEATZZA_LARGE = 21.99;
 
-    // Private constructor to prevent instantiation
+    /**
+     * Private constructor to prevent instantiation of the PriceCalculator class.
+     * This class is intended to be used only through its static methods.
+     */
     private PriceCalculator() {}
 
     /**

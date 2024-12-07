@@ -46,6 +46,11 @@ public class BuildYourOwn extends Pizza {
         }
     }
 
+    /**
+     * Retrieves the type of the pizza, specifically "Build Your Own" for this class.
+     *
+     * @return A string indicating the type of the pizza.
+     */
     public String getType() {
         return "Build Your Own";
     }
@@ -86,14 +91,14 @@ public class BuildYourOwn extends Pizza {
     public String toString() {
         try {
             return String.format(
-                    Locale.US, // Specify the desired locale
+                    Locale.US,
                     "%s (%s), %s %s, Toppings: %s | Price: $%.2f",
-                    getType(),                  // Pizza type (e.g., "Build Your Own")
-                    getStyle(),                 // Style (e.g., "Chicago")
-                    getSize(),                  // Size (e.g., "MEDIUM")
-                    getCrust(),                 // Crust (e.g., "PAN")
-                    getToppings().isEmpty() ? "None" : getToppings().toString(), // Toppings or "None"
-                    price()                     // Calculated price
+                    getType(),
+                    getStyle(),
+                    getSize(),
+                    getCrust(),
+                    getToppings().isEmpty() ? "None" : getToppings().toString(),
+                    price()
             );
         } catch (Exception e) {
             return "Error displaying pizza details: " + e.getMessage();
