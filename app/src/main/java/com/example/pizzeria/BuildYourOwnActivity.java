@@ -308,29 +308,37 @@ public class BuildYourOwnActivity extends AppCompatActivity {
 
     private void updateCrustText() {
         String selectedType = pizzaTypeSpinner.getSelectedItem().toString();
-        String crust;
-
         if ("Chicago".equals(style)) {
-            crust = switch (selectedType) {
-                case "Deluxe" -> "Deep Dish";
-                case "BBQ Chicken" -> "Pan";
-                case "Meatzza" -> "Stuffed";
-                case "Build your own" -> "Pan";
-                default -> "";
-            };
+            switch (selectedType) {
+                case "Deluxe":
+                    crustTextView.setText("Deep Dish");
+                    break;
+                case "BBQ Chicken":
+                    crustTextView.setText("Pan");
+                    break;
+                case "Meatzza":
+                    crustTextView.setText("Stuffed");
+                    break;
+                case "Build your own":
+                    crustTextView.setText("Pan");
+                    break;
+            }
         } else if ("NY".equals(style)) {
-            crust = switch (selectedType) {
-                case "Deluxe" -> "Brooklyn";
-                case "BBQ Chicken" -> "Thin";
-                case "Meatzza" -> "Hand-tossed";
-                case "Build your own" -> "Hand-tossed";
-                default -> "";
-            };
-        } else {
-            crust = ""; // Default case for unexpected styles
+            switch (selectedType) {
+                case "Deluxe":
+                    crustTextView.setText("Brooklyn");
+                    break;
+                case "BBQ Chicken":
+                    crustTextView.setText("Thin");
+                    break;
+                case "Meatzza":
+                    crustTextView.setText("Hand-tossed");
+                    break;
+                case "Build your own":
+                    crustTextView.setText("Hand-tossed");
+                    break;
+            }
         }
-
-        crustTextView.setText(getString(R.string.build_your_own_crust_label, crust)); // Use string resource
     }
 
     private void updatePizzaImage() {

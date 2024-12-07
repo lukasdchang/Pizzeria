@@ -15,7 +15,8 @@
     <string name="build_your_own_small">Small</string>
     <string name="build_your_own_medium">Medium</string>
     <string name="build_your_own_large">Large</string>
-    <string name="build_your_own_crust_label">Crust: %1$s</string>
+    <string name="build_your_own_crust_label">Crust:</string>
+    <string name="build_your_own_crust_placeholder">crust type</string>
     <string name="build_your_own_add_topping">Add Topping</string>
     <string name="build_your_own_remove_topping">Remove Topping</string>
     <string name="build_your_own_price_label">Price:</string>
